@@ -7,9 +7,7 @@
   <style>
     :root{
       --bg:#07111d;
-      --bg2:#0d1828;
       --panel:rgba(10,18,31,.85);
-      --soft:rgba(255,255,255,.04);
       --line:rgba(255,255,255,.08);
       --text:#eef4ff;
       --muted:#9fb0ca;
@@ -95,10 +93,7 @@
       margin:20px 0 10px;
     }
 
-    .nav{
-      display:grid;
-      gap:8px;
-    }
+    .nav{display:grid;gap:8px}
 
     .nav a{
       display:block;
@@ -167,11 +162,7 @@
       border-bottom:1px solid var(--line);
     }
 
-    .badges{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
+    .badges{display:flex;gap:10px;flex-wrap:wrap}
 
     .badge{
       display:inline-flex;
@@ -209,9 +200,13 @@
       margin-bottom:24px;
     }
 
-    url('assets/file_1777641799310.jpg') center/cover no-repeat;
-
-
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(5,10,18,.18), rgba(5,10,18,.75)),
+        url('assets/file_1777641799310.jpg') center/cover no-repeat;
     }
 
     .hero-inner{
@@ -521,7 +516,6 @@
           <div class="grid-2">
             <div class="section-image">
               <img src="assets/file_1777359468454.jpg" alt="Copertina Il Vertice" />
-
             </div>
             <div>
               <h2>Benvenuto nel tuo spazio di trasformazione</h2>
@@ -618,8 +612,7 @@
           <span class="eyebrow">Capitolo 7</span>
           <h2>La disciplina del vertice</h2>
           <div class="section-image">
-          <img src="file_1777641807102.jpg" alt="Disciplina e focus" />
-
+            <img src="file_1777641807102.jpg" alt="Disciplina e focus" />
           </div>
           <div style="margin-top:18px">
             <p>
@@ -643,7 +636,7 @@
           <span class="eyebrow">Capitolo 10</span>
           <h2>La community elevata</h2>
           <div class="section-image">
-            <img src="assets/community.jpg" alt="Community elevata" />
+            <img src="file_1777641810201.jpg" alt="Community elevata" />
           </div>
           <div style="margin-top:18px">
             <p>
@@ -662,7 +655,7 @@
           <span class="eyebrow">Capitolo 11</span>
           <h2>Il protocollo della versione più alta</h2>
           <div class="section-image">
-            <img src="assets/protocollo.jpg" alt="Protocollo dei 90 giorni" />
+            <img src="file_1777641814116.jpg" alt="Protocollo dei 90 giorni" />
           </div>
           <div style="margin-top:18px">
             <p>
@@ -693,7 +686,7 @@
           <span class="eyebrow">Conclusione</span>
           <h2>La vita che meriti di abitare</h2>
           <div class="section-image">
-            <img src="assets/finale.jpg" alt="Summit finale" />
+            <img src="file_1777641817779.jpg" alt="Summit finale" />
           </div>
           <div style="margin-top:18px">
             <p>
@@ -793,7 +786,7 @@
         </section>
 
         <p class="footer-note">
-          Versione stabile del libro virtuale — pronta per GitHub Pages e per caricamento immagini locali.
+          Versione stabile del libro virtuale — pronta per GitHub Pages e per il salvataggio locale.
         </p>
       </div>
     </main>
@@ -802,8 +795,8 @@
   <div class="floating-save" id="saveStatus">Nessuna modifica</div>
 
   <script>
-    const STORAGE_KEY = "il_vertice_stabile_v1";
-    const LAST_SECTION_KEY = "il_vertice_last_section_v1";
+    const STORAGE_KEY = "il_vertice_stabile_v2";
+    const LAST_SECTION_KEY = "il_vertice_last_section_v2";
 
     const saveStatus = document.getElementById("saveStatus");
     const lastSaved = document.getElementById("lastSaved");
@@ -902,102 +895,4 @@
       const doc = document.documentElement;
       const total = doc.scrollHeight - doc.clientHeight;
       const scrolled = total > 0 ? (window.scrollY / total) * 100 : 0;
-      const percent = Math.max(0, Math.min(100, Math.round(scrolled)));
-      progressFill.style.width = percent + "%";
-      progressText.textContent = percent + "%";
-    }
-
-    let saveTimer;
-    function scheduleSave(){
-      clearTimeout(saveTimer);
-      setStatus("Salvataggio...");
-      saveTimer = setTimeout(saveData, 250);
-    }
-
-    saveFields.forEach(el => {
-      el.addEventListener("input", scheduleSave);
-      el.addEventListener("change", scheduleSave);
-    });
-
-    document.getElementById("continueBtn").addEventListener("click", goToLastSection);
-
-    document.getElementById("exportBtn").addEventListener("click", () => {
-      const data = {
-        exportedAt: new Date().toISOString(),
-        values: collectData()
-      };
-      const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "il-vertice-appunti.json";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-      setStatus("Appunti esportati");
-    });
-
-    document.getElementById("importBtn").addEventListener("click", () => {
-      importFile.click();
-    });
-
-    importFile.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if(!file) return;
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        try{
-          const imported = JSON.parse(reader.result);
-          const values = imported.values || imported;
-
-          saveFields.forEach(el => {
-            if(!el.id) return;
-            if(!(el.id in values)) return;
-
-            if(el.type === "checkbox"){
-              el.checked = !!values[el.id];
-            } else {
-              el.value = values[el.id] || "";
-            }
-          });
-
-          saveData();
-          setStatus("Appunti importati");
-        }catch(err){
-          alert("File non valido");
-        }
-      };
-      reader.readAsText(file);
-      e.target.value = "";
-    });
-
-    document.getElementById("resetBtn").addEventListener("click", () => {
-      const ok = confirm("Vuoi davvero cancellare tutti i dati salvati di questo libro?");
-      if(!ok) return;
-
-      localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem(LAST_SECTION_KEY);
-
-      saveFields.forEach(el => {
-        if(el.type === "checkbox"){
-          el.checked = false;
-        } else {
-          el.value = "";
-        }
-      });
-
-      setStatus("Dati cancellati");
-      window.scrollTo({top:0, behavior:"smooth"});
-      updateActiveLink();
-    });
-
-    window.addEventListener("scroll", updateActiveLink);
-    window.addEventListener("load", () => {
-      loadData();
-      updateActiveLink();
-    });
-  </script>
-</body>
-</html>
+      const percent = Math.max(0
