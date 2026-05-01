@@ -489,7 +489,7 @@
       <div class="topbar">
         <div class="badges">
           <div class="badge"><span class="dot"></span> Salvataggio attivo</div>
-          <div class="badge">Immagini locali</div>
+          <div class="badge">Immagini collegate</div>
           <div class="badge">Versione stabile</div>
         </div>
         <div class="badge" id="lastSaved">Pronto</div>
@@ -706,11 +706,26 @@
           <details open>
             <summary>Apri e scrivi le tue risposte</summary>
             <div class="details-body">
-              <div class="field-group"><label class="field-label">1. Dove sto ancora vivendo sotto il mio livello?</label><textarea id="q1" data-save></textarea></div>
-              <div class="field-group"><label class="field-label">2. Quale paura governa ancora una scelta importante?</label><textarea id="q2" data-save></textarea></div>
-              <div class="field-group"><label class="field-label">3. In quale area della vita sto tollerando troppo?</label><textarea id="q3" data-save></textarea></div>
-              <div class="field-group"><label class="field-label">4. Dove mi sto raccontando una storia che mi indebolisce?</label><textarea id="q4" data-save></textarea></div>
-              <div class="field-group"><label class="field-label">5. Chi sto diventando attraverso le mie abitudini attuali?</label><textarea id="q5" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q1">1. Dove sto ancora vivendo sotto il mio livello?</label><textarea id="q1" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q2">2. Quale paura governa ancora una scelta importante?</label><textarea id="q2" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q3">3. In quale area della vita sto tollerando troppo?</label><textarea id="q3" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q4">4. Dove mi sto raccontando una storia che mi indebolisce?</label><textarea id="q4" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q5">5. Chi sto diventando attraverso le mie abitudini attuali?</label><textarea id="q5" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q6">6. Quale standard devo alzare subito?</label><textarea id="q6" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q7">7. Cosa sto rimandando che in realtà so già di dover fare?</label><textarea id="q7" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q8">8. Quale parte di me ha bisogno di più verità?</label><textarea id="q8" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q9">9. Dove sto cercando approvazione invece di direzione?</label><textarea id="q9" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q10">10. Quale abitudine mi abbassa ogni giorno?</label><textarea id="q10" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q11">11. Quale scelta renderebbe la mia vita più pulita?</label><textarea id="q11" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q12">12. Cosa non voglio più tollerare da me stesso?</label><textarea id="q12" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q13">13. Quale ambiente devo lasciare?</label><textarea id="q13" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q14">14. Che tipo di leader voglio essere?</label><textarea id="q14" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q15">15. Quale parte della mia identità va ricostruita?</label><textarea id="q15" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q16">16. Cosa voglio incarnare nei prossimi 90 giorni?</label><textarea id="q16" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q17">17. Quale paura devo attraversare per crescere?</label><textarea id="q17" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q18">18. Dove mi sto ancora tradendo?</label><textarea id="q18" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q19">19. Quale visione merita più fedeltà da parte mia?</label><textarea id="q19" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="q20">20. Chi scelgo di essere da oggi in poi?</label><textarea id="q20" data-save></textarea></div>
             </div>
           </details>
         </section>
@@ -795,8 +810,8 @@
   <div class="floating-save" id="saveStatus">Nessuna modifica</div>
 
   <script>
-    const STORAGE_KEY = "il_vertice_stabile_v2";
-    const LAST_SECTION_KEY = "il_vertice_last_section_v2";
+    const STORAGE_KEY = "il_vertice_stabile_v3";
+    const LAST_SECTION_KEY = "il_vertice_last_section_v3";
 
     const saveStatus = document.getElementById("saveStatus");
     const lastSaved = document.getElementById("lastSaved");
@@ -807,9 +822,11 @@
     const sections = Array.from(document.querySelectorAll("section[id]"));
     const tocLinks = Array.from(document.querySelectorAll("#toc a"));
 
+    let saveTimer = null;
+
     function setStatus(message){
       saveStatus.textContent = message;
-      lastSaved.textContent = message;
+      if(lastSaved) lastSaved.textContent = message;
     }
 
     function collectData(){
@@ -832,15 +849,25 @@
         const now = new Date();
         const time = now.toLocaleTimeString("it-IT", {hour:"2-digit", minute:"2-digit"});
         setStatus("Salvato alle " + time);
+        updateProgressFromFields();
       }catch(err){
         setStatus("Errore salvataggio");
       }
     }
 
+    function scheduleSave(){
+      setStatus("Salvataggio...");
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveData, 500);
+    }
+
     function loadData(){
       try{
         const raw = localStorage.getItem(STORAGE_KEY);
-        if(!raw) return;
+        if(!raw){
+          updateProgressFromFields();
+          return;
+        }
         const data = JSON.parse(raw);
 
         saveFields.forEach(el => {
@@ -855,6 +882,7 @@
         });
 
         setStatus("Dati ripristinati");
+        updateProgressFromFields();
       }catch(err){
         setStatus("Errore ripristino");
       }
@@ -867,17 +895,19 @@
     }
 
     function goToLastSection(){
-      const last = localStorage.getItem(LAST_SECTION_KEY);
-      if(last){
-        const el = document.getElementById(last);
-        if(el){
-          el.scrollIntoView({behavior:"smooth", block:"start"});
+      try{
+        const last = localStorage.getItem(LAST_SECTION_KEY);
+        if(last){
+          const el = document.getElementById(last);
+          if(el){
+            el.scrollIntoView({behavior:"smooth", block:"start"});
+          }
         }
-      }
+      }catch(err){}
     }
 
     function updateActiveLink(){
-      let current = sections[0]?.id || "";
+      let current = sections[0] ? sections[0].id : "";
       const offset = window.scrollY + 140;
 
       sections.forEach(section => {
@@ -895,4 +925,117 @@
       const doc = document.documentElement;
       const total = doc.scrollHeight - doc.clientHeight;
       const scrolled = total > 0 ? (window.scrollY / total) * 100 : 0;
-      const percent = Math.max(0
+      const percent = Math.max(0, Math.min(100, Math.round(scrolled)));
+      progressFill.style.width = percent + "%";
+      progressText.textContent = percent + "%";
+    }
+
+    function updateProgressFromFields(){
+      const total = saveFields.length;
+      if(!total) return;
+
+      let filled = 0;
+      saveFields.forEach(el => {
+        if(el.type === "checkbox"){
+          if(el.checked) filled++;
+        } else if(String(el.value || "").trim() !== ""){
+          filled++;
+        }
+      });
+
+      const percent = Math.round((filled / total) * 100);
+      if(percent > parseInt(progressText.textContent, 10) || progressText.textContent === "0%"){
+        progressText.textContent = percent + "%";
+      }
+    }
+
+    function exportData(){
+      try{
+        const data = collectData();
+        const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "il-vertice-appunti.json";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        setStatus("Appunti esportati");
+      }catch(err){
+        setStatus("Errore export");
+      }
+    }
+
+    function importDataFromFile(file){
+      const reader = new FileReader();
+      reader.onload = function(){
+        try{
+          const data = JSON.parse(reader.result);
+
+          saveFields.forEach(el => {
+            if(!el.id) return;
+            if(!(el.id in data)) return;
+
+            if(el.type === "checkbox"){
+              el.checked = !!data[el.id];
+            } else {
+              el.value = data[el.id] || "";
+            }
+          });
+
+          saveData();
+          setStatus("Appunti importati");
+        }catch(err){
+          setStatus("File non valido");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetAll(){
+      const ok = confirm("Vuoi davvero cancellare tutti i campi salvati di questo libro su questo dispositivo?");
+      if(!ok) return;
+
+      saveFields.forEach(el => {
+        if(el.type === "checkbox"){
+          el.checked = false;
+        } else {
+          el.value = "";
+        }
+      });
+
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(LAST_SECTION_KEY);
+      updateProgressFromFields();
+      progressFill.style.width = "0%";
+      progressText.textContent = "0%";
+      setStatus("Reset completato");
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+
+    saveFields.forEach(el => {
+      const eventName = el.type === "checkbox" ? "change" : "input";
+      el.addEventListener(eventName, scheduleSave);
+    });
+
+    document.getElementById("continueBtn").addEventListener("click", goToLastSection);
+    document.getElementById("exportBtn").addEventListener("click", exportData);
+    document.getElementById("importBtn").addEventListener("click", () => importFile.click());
+    document.getElementById("resetBtn").addEventListener("click", resetAll);
+
+    importFile.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if(file) importDataFromFile(file);
+      e.target.value = "";
+    });
+
+    window.addEventListener("scroll", updateActiveLink);
+    window.addEventListener("load", () => {
+      loadData();
+      updateActiveLink();
+      setTimeout(updateActiveLink, 300);
+    });
+  </script>
+</body>
+</html>
