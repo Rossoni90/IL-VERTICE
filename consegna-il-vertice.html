@@ -15,9 +15,7 @@
       --gold2:#f2dbab;
       --shadow:0 24px 50px rgba(0,0,0,.35);
     }
-
     *{box-sizing:border-box}
-
     body{
       margin:0;
       min-height:100vh;
@@ -31,7 +29,6 @@
         radial-gradient(circle at top left, rgba(214,176,106,.10), transparent 18%),
         linear-gradient(180deg,#040b14,#08111d 35%,#07111d 100%);
     }
-
     .card{
       width:min(760px,100%);
       background:var(--panel);
@@ -41,7 +38,6 @@
       box-shadow:var(--shadow);
       text-align:center;
     }
-
     .eyebrow{
       display:inline-block;
       padding:8px 12px;
@@ -54,14 +50,12 @@
       text-transform:uppercase;
       margin-bottom:16px;
     }
-
     h1{
       margin:0 0 12px;
       font-size:clamp(2rem,5vw,3.2rem);
       line-height:1.1;
       font-family:Georgia,"Times New Roman",serif;
     }
-
     p{
       margin:0 auto 14px;
       max-width:620px;
@@ -69,13 +63,11 @@
       line-height:1.7;
       font-size:1.03rem;
     }
-
     .actions{
       display:grid;
       gap:14px;
       margin-top:28px;
     }
-
     .btn{
       display:block;
       text-decoration:none;
@@ -86,18 +78,15 @@
       color:#08111b;
       transition:transform .15s ease, opacity .2s ease;
     }
-
     .btn:hover{
       transform:translateY(-1px);
       opacity:.96;
     }
-
     .btn-secondary{
       background:rgba(255,255,255,.06);
       color:var(--text);
       border:1px solid var(--line);
     }
-
     .box{
       margin-top:24px;
       padding:18px;
@@ -106,21 +95,13 @@
       background:rgba(255,255,255,.03);
       text-align:left;
     }
-
     .box p{
       margin:0 0 10px;
       max-width:none;
       font-size:.97rem;
     }
-
-    .box p:last-child{
-      margin-bottom:0;
-    }
-
-    strong{
-      color:var(--gold2);
-    }
-
+    .box p:last-child{margin-bottom:0}
+    strong{color:var(--gold2)}
     .small{
       color:var(--muted);
       font-size:.93rem;
@@ -130,7 +111,6 @@
 <body>
   <div class="card">
     <span class="eyebrow">Pagamento completato</span>
-
     <h1>Benvenuto in IL VERTICE</h1>
 
     <p>
@@ -150,7 +130,7 @@
 
     <div class="box">
       <p><strong>Importante:</strong> per ritrovare i campi salvati del libro, aprilo sempre dallo stesso browser o dispositivo.</p>
-      <p class="small">Se stai aprendo il PDF da telefono, attendi qualche secondo se il download non parte subito.</p>
+      <p class="small">Se da telefono il PDF non parte subito, attendi qualche secondo o riapri il pulsante una seconda volta.</p>
     </div>
   </div>
 </body>
