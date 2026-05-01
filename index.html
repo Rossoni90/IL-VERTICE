@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IL VERTICE — Libro Virtuale Interattivo</title>
+  <style>
+    :root{
+      --bg:#06101d;
+      --bg2:#0b1728;
+      --panel:rgba(10,18,31,.78);
+      --panel2:rgba(255,255,255,.04);
+      --text:#eef4ff;
+      --muted:#a8b6cf;
+      --gold:#d7b26d;
+      --gold2:#f0d7a5;
+      --line:rgba(255,255,255,.08);
+      --accent:#6aa7ff;
+      --ok:#7ee0b5;
+      --danger:#ff9a9a;
+      --radius:22px;
+      --shadow:0 22px 52px rgba(0,0,0,.35);
+      --max:1240px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--text);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      line-height:1.7;
+      background:
+        radial-gradient(circle at top right, rgba(106,167,255,.12), transparent 20%),
+        radial-gradient(circle at top left, rgba(215,178,109,.10), transparent 18%),
+        linear-gradient(180deg,#040b15,#08111f 34%,#06101d 100%);
+    }
+    a{color:var(--gold2);text-decoration:none}
+    img{max-width:100%;display:block}
+    h1,h2,h3,h4{
+      margin:0 0 14px;
+      line-height:1.15;
+      font-family:Georgia,"Times New Roman",serif;
+      letter-spacing:.2px;
+    }
+    h1{font-size:clamp(2.4rem,5vw,4.7rem)}
+    h2{font-size:clamp(1.7rem,3vw,2.8rem)}
+    h3{font-size:clamp(1.2rem,2vw,1.55rem)}
+    h4{font-size:1.06rem}
+    p{margin:0 0 16px}
+    ul{margin:0 0 18px 20px}
+    li{margin:6px 0}
+    .shell{display:grid;grid-template-columns:310px 1fr;min-height:100vh}
+    .sidebar{
+      position:sticky;top:0;height:100vh;overflow:auto;
+      padding:20px 18px 28px;
+      background:rgba(4,10,18,.78);
+      backdrop-filter:blur(14px);
+      border-right:1px solid var(--line);
+    }
+    .brand{display:flex;gap:14px;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:18px}
+    .mark{
+      width:46px;height:46px;border-radius:14px;
+      background:linear-gradient(135deg,var(--gold),#80602b);
+      box-shadow:0 8px 24px rgba(215,178,109,.24);
+      flex:0 0 auto;
+    }
+    .brand-title{font-family:Georgia,"Times New Roman",serif;font-size:1.12rem;margin:0}
+    .brand-sub{font-size:.86rem;color:var(--muted);margin:2px 0 0}
+    .progress-top{display:flex;justify-content:space-between;font-size:.86rem;color:var(--muted);margin-bottom:8px}
+    .progress-bar{height:8px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+    .progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--accent));transition:width .2s}
+    .nav-group{margin:20px 0}
+    .nav-title{
+      margin:0 0 10px;font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--gold2)
+    }
+    .nav{display:grid;gap:8px}
+    .nav a{
+      display:block;padding:10px 12px;border-radius:12px;
+      color:var(--text);border:1px solid transparent;
+      font-size:.94rem;transition:.18s ease;
+    }
+    .nav a:hover,.nav a.active{
+      background:rgba(255,255,255,.05);border-color:var(--line)
+    }
+    .sidebar-actions{display:grid;gap:10px;padding-top:18px;border-top:1px solid var(--line)}
+    button,.btn{
+      appearance:none;border:none;cursor:pointer;
+      padding:12px 14px;border-radius:14px;font-weight:700;
+      background:linear-gradient(135deg,var(--gold2),var(--gold));
+      color:#08111b;box-shadow:0 10px 28px rgba(215,178,109,.16);
+      transition:transform .15s ease,opacity .2s;
+    }
+    button:hover,.btn:hover{transform:translateY(-1px)}
+    .btn-secondary{
+      background:rgba(255,255,255,.06);color:var(--text);
+      border:1px solid var(--line);box-shadow:none
+    }
+    .btn-danger{
+      background:linear-gradient(135deg,#ffc0c0,var(--danger));
+      color:#2d0b0b;
+    }
+    .main{min-width:0}
+    .topbar{
+      position:sticky;top:0;z-index:40;
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+      padding:14px 24px;background:rgba(4,10,18,.76);backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--line);
+    }
+    .top-left{display:flex;gap:12px;flex-wrap:wrap}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;
+      background:rgba(255,255,255,.05);border:1px solid var(--line);
+      color:var(--muted);font-size:.88rem
+    }
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+    .container{max-width:var(--max);margin:0 auto;padding:26px 24px 90px}
+    .hero{
+      position:relative;overflow:hidden;border-radius:34px;border:1px solid var(--line);
+      box-shadow:var(--shadow);margin-bottom:24px;
+      min-height:580px;background:#091321;
+    }
+    .hero-bg{
+      position:absolute;inset:0;
+      background:
+        linear-gradient(180deg,rgba(4,10,18,.18),rgba(4,10,18,.74)),
+        url('https://www.genspark.ai/api/files/s/WLgk6vAq?cache_control=3600') center/cover no-repeat;
+    }
+    .hero-inner{position:relative;padding:74px 42px 42px;max-width:880px}
+    .eyebrow{
+      display:inline-block;padding:8px 12px;border-radius:999px;
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+      color:var(--gold2);font-size:.84rem;letter-spacing:.08em;text-transform:uppercase;
+      margin-bottom:18px;
+    }
+    .lead{font-size:1.08rem;color:#dce7fb;max-width:760px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+    .panel{
+      background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+      padding:24px;margin-bottom:22px;box-shadow:var(--shadow)
+    }
+    .soft{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.02))}
+    .grid-2{display:grid;grid-template-columns:1.06fr .94fr;gap:20px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .section-image{
+      overflow:hidden;border-radius:18px;border:1px solid var(--line);background:#08111b
+    }
+    .section-image img{width:100%;height:auto}
+    .quote{
+      padding:18px 20px;border-left:3px solid var(--gold);
+      background:rgba(255,255,255,.03);border-radius:14px;
+      color:#f4f7fe;font-style:italic
+    }
+    .field-label{
+      display:block;margin:0 0 8px;color:var(--gold2);font-weight:700;font-size:.94rem
+    }
+    .field-group{margin-bottom:16px}
+    input[type="text"],input[type="date"],input[type="number"],textarea,select{
+      width:100%;border-radius:16px;border:1px solid var(--line);
+      background:rgba(255,255,255,.04);color:var(--text);
+      padding:14px 15px;outline:none;font:inherit;transition:.18s ease;
+    }
+    textarea{min-height:130px;resize:vertical}
+    textarea:focus,input:focus,select:focus{
+      border-color:rgba(215,178,109,.72);background:rgba(255,255,255,.06)
+    }
+    .muted{color:var(--muted)}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:.82rem;padding:7px 11px;border-radius:999px;
+      background:rgba(255,255,255,.05);border:1px solid var(--line);
+      color:var(--muted);margin:0 8px 8px 0
+    }
+    .check-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .check-card{
+      display:flex;gap:10px;align-items:flex-start;padding:14px;
+      border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.03)
+    }
+    .check-card input{margin-top:4px;transform:scale(1.15);accent-color:var(--gold)}
+    .score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    details{
+      border:1px solid var(--line);border-radius:18px;overflow:hidden;
+      background:rgba(255,255,255,.03);margin-bottom:14px
+    }
+    details summary{
+      cursor:pointer;list-style:none;padding:18px 20px;
+      font-weight:800;background:rgba(255,255,255,.02)
+    }
+    details summary::-webkit-details-marker{display:none}
+    .details-body{padding:18px 20px}
+    .hr{height:1px;background:var(--line);margin:20px 0}
+    .mini-card{
+      border:1px solid var(--line);border-radius:18px;padding:16px;background:rgba(255,255,255,.03)
+    }
+    .day-card{
+      border:1px solid var(--line);border-radius:18px;padding:18px;background:rgba(255,255,255,.03);margin-bottom:14px
+    }
+    .day-card h4{margin-bottom:10px}
+    .floating-save{
+      position:fixed;right:18px;bottom:18px;z-index:50;
+      background:rgba(7,18,31,.92);color:var(--text);border:1px solid var(--line);
+      border-radius:999px;padding:10px 14px;box-shadow:var(--shadow);font-size:.9rem
+    }
+    .footer-note{text-align:center;color:var(--muted);font-size:.92rem;margin-top:28px}
+    @media(max-width:980px){
+      .shell{grid-template-columns:1fr}
+      .sidebar{position:relative;height:auto;border-right:none;border-bottom:1px solid var(--line)}
+      .grid-2,.grid-3,.grid-4,.score-grid{grid-template-columns:1fr}
+      .check-grid{grid-template-columns:1fr}
+      .container{padding:18px 16px 80px}
+      .topbar{padding:12px 16px}
+      .hero{min-height:480px}
+      .hero-inner{padding:56px 22px 26px}
+    }
+    @media print{
+      .sidebar,.topbar,.floating-save,.hero-actions,.sidebar-actions{display:none!important}
+      .shell{display:block}
+      body{background:#fff;color:#111}
+      .panel,.hero,details,.section-image,.day-card,.mini-card{
+        box-shadow:none!important;background:#fff!important;color:#111!important;
+        border:1px solid #ddd!important
+      }
+      input,textarea,select{color:#111!important;border:1px solid #ccc!important;background:#fff!important}
+      .field-label,h1,h2,h3,h4,a{color:#111!important}
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="mark"></div>
+        <div>
+          <p class="brand-title">IL VERTICE</p>
+          <p class="brand-sub">Libro virtuale interattivo completo</p>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span>Progresso lettura</span>
+          <span id="progressText">0%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+
+      <div class="nav-group">
+        <p class="nav-title">Indice</p>
+        <nav class="nav" id="toc">
+          <a href="#cover">Copertina</a>
+          <a href="#welcome">Benvenuto</a>
+          <a href="#nota">Nota editoriale</a>
+          <a href="#indice">Indice libro</a>
+          <a href="#cap1">1. Il successo che regge davvero</a>
+          <a href="#cap2">2. Il richiamo del tuo io imprenditoriale</a>
+          <a href="#cap3">3. La struttura invisibile dei grandi risultati</a>
+          <a href="#cap4">4. Smettere di tradire il proprio livello</a>
+          <a href="#cap5">5. Identità, standard e autoimmagine</a>
+          <a href="#cap6">6. Tirare fuori il meglio da sé</a>
+          <a href="#cap7">7. La disciplina del vertice</a>
+          <a href="#cap8">8. Leadership interiore e potere personale</a>
+          <a href="#cap9">9. Business, vita e statura umana</a>
+          <a href="#cap10">10. La community elevata</a>
+          <a href="#cap11">11. Il protocollo della versione più alta</a>
+          <a href="#cap12">12. Il codice del vertice</a>
+          <a href="#conclusione">Conclusione</a>
+          <a href="#bonus">Bonus finali</a>
+          <a href="#workbook">Workbook 90 giorni</a>
+          <a href="#dailytemplate">Pagina giornaliera</a>
+          <a href="#weeklyreview">Revisione settimanale</a>
+          <a href="#monthlyreset">Reset di fine mese</a>
+          <a href="#finalreader">Dichiarazione finale</a>
+        </nav>
+      </div>
+
+      <div class="sidebar-actions">
+        <button class="btn-secondary" id="continueBtn">Continua da dove eri rimasto</button>
+        <button class="btn-secondary" id="exportBtn">Esporta i miei appunti</button>
+        <button class="btn-secondary" id="importBtn">Importa i miei appunti</button>
+        <button class="btn-secondary" onclick="window.print()">Modalità stampa</button>
+        <button class="btn-danger" id="resetBtn">Reset guidato</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" />
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="top-left">
+          <div class="badge"><span class="dot"></span> Salvataggio automatico attivo</div>
+          <div class="badge">Lettura + scrittura + workbook</div>
+          <div class="badge">Versione completa</div>
+        </div>
+        <div class="badge" id="lastSaved">Pronto</div>
+      </div>
+
+      <div class="container">
+        <section id="cover" class="hero">
+          <div class="hero-bg"></div>
+          <div class="hero-inner">
+            <span class="eyebrow">Libro virtuale premium</span>
+            <h1>IL VERTICE</h1>
+            <p class="lead">La via reale per costruire il tuo io imprenditoriale, raggiungere il successo autentico e diventare la versione più alta di te.</p>
+            <div class="hero-actions">
+              <a class="btn" href="#nota">Inizia il libro</a>
+              <a class="btn btn-secondary" href="#workbook">Vai al workbook</a>
+            </div>
+          </div>
+        </section>
+
+        <section id="welcome" class="panel">
+          <div class="grid-2">
+            <div class="section-image">
+              <img src="https://www.genspark.ai/api/files/s/aALWyj5H?cache_control=3600" alt="Copertina Il Vertice" />
+            </div>
+            <div>
+              <h2>Benvenuto nel tuo spazio di trasformazione</h2>
+              <p>Questo file non è un semplice documento. È un libro virtuale interattivo da aprire, leggere, compilare e vivere. Dentro trovi testo, esercizi, guide, check, riflessioni e un workbook da 90 giorni.</p>
+              <div class="field-group">
+                <label class="field-label" for="reader_name">Il tuo nome</label>
+                <input type="text" id="reader_name" data-save placeholder="Scrivi il tuo nome" />
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="reader_start">Data di inizio</label>
+                <input type="date" id="reader_start" data-save />
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="reader_reason">Perché hai scelto di iniziare questo percorso</label>
+                <textarea id="reader_reason" data-save placeholder="Scrivi la tua motivazione reale"></textarea>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="reader_transform">Cosa vuoi trasformare davvero</label>
+                <textarea id="reader_transform" data-save placeholder="Scrivi cosa vuoi cambiare in profondità"></textarea>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="nota" class="panel soft">
+          <span class="eyebrow">Nota editoriale</span>
+          <h2>Questo libro non nasce per intrattenere. Nasce per trasformare.</h2>
+          <p>Non è stato scritto per chi cerca una spinta momentanea, una motivazione da consumare in fretta o l’ennesima teoria sul successo. È stato scritto per chi sente, in modo profondo, di non essere qui per vivere in piccolo.</p>
+          <p>Per chi sa che dentro di sé esiste una versione più forte, più lucida, più pulita, più capace. Per chi non vuole più inseguire un’immagine vincente, ma diventare davvero una persona all’altezza della propria visione.</p>
+          <p>Queste pagine parlano di successo autentico, identità imprenditoriale, forza mentale, disciplina, visione, relazioni, standard, leadership personale e statura interiore.</p>
+          <div class="quote">“Sto davvero vivendo all’altezza di ciò che potrei essere?”</div>
+        </section>
+
+        <section id="indice" class="panel">
+          <span class="eyebrow">Indice</span>
+          <h2>Struttura del libro</h2>
+          <div class="grid-3">
+            <div class="mini-card">
+              <h4>Prima parte</h4>
+              <p class="muted">Successo autentico, identità, struttura interiore, standard e potenziale.</p>
+            </div>
+            <div class="mini-card">
+              <h4>Seconda parte</h4>
+              <p class="muted">Disciplina, leadership, business, relazioni, community, protocollo e codice personale.</p>
+            </div>
+            <div class="mini-card">
+              <h4>Terza parte</h4>
+              <p class="muted">Bonus, workbook 90 giorni, journaling, tracker, reset, consolidamento.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="cap1" class="panel">
+          <span class="eyebrow">Capitolo 1</span>
+          <h2>Il successo che regge davvero</h2>
+          <p>Il mondo ti ha insegnato a riconoscere il successo dalle sue forme visibili: denaro, status, risultati, libertà, riconoscimento, impatto. Ma quasi nessuno ti ha spiegato la domanda decisiva: come sostenerlo?</p>
+          <p>Molte persone raggiungono qualcosa, ma non hanno ancora costruito una struttura interiore capace di contenerlo. Così ciò che desideravano finisce per destabilizzarle. Quello che doveva espanderle diventa ciò che le mette sotto pressione.</p>
+          <p>Il successo reale non è quello che arriva soltanto. È quello che resta, cresce e si approfondisce senza distruggerti. Per questo il successo autentico ha sempre due dimensioni: una esterna, fatta di risultati, e una interiore, fatta di struttura. Se manca la seconda, la prima diventa fragile.</p>
+          <p>Avere successo davvero significa costruire risultati senza perdere lucidità, crescere senza smarrire identità, guidare senza diventare rigido, prosperare senza vivere nell’ansia, essere forte senza perdere umanità.</p>
+          <div class="grid-2">
+            <div class="field-group">
+              <label class="field-label" for="cap1_success">Che idea ho oggi del successo?</label>
+              <textarea id="cap1_success" data-save placeholder="Sto inseguendo immagine o sostanza?"></textarea>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="cap1_real">Cosa significa per me un successo che regge?</label>
+              <textarea id="cap1_real" data-save placeholder="Scrivi la tua definizione personale"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section id="cap2" class="panel">
+          <span class="eyebrow">Capitolo 2</span>
+          <h2>Il richiamo del tuo io imprenditoriale</h2>
+          <div class="section-image">
+            <img src="https://www.genspark.ai/api/files/s/cjCcLIp6?cache_control=3600" alt="Trasformazione identitaria" />
+          </div>
+          <div style="margin-top:18px">
+            <p>Dentro di te esiste già una versione più alta. Non è fantasia. Non è un’illusione motivazionale. È potenziale non ancora pienamente organizzato.</p>
+            <p>Quella versione pensa con più chiarezza, sceglie con più forza, tollera meno il disordine, protegge meglio il proprio tempo, non si perde nelle scuse, non si definisce per i momenti bassi, sa costruire, reggere e guidare.</p>
+            <p>Il problema è che molte persone vivono identificate con la propria versione attuale, come se fosse definitiva. Confondono abitudini presenti con identità, paure presenti con verità, limiti attuali con destino.</p>
+            <p>Ma il tuo io imprenditoriale non coincide con come ti senti oggi. Coincide con ciò che sei capace di diventare quando smetti di vivere in reazione e inizi a vivere in direzione.</p>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="cap2_highself">Descrivi la tua versione imprenditoriale più alta</label>
+            <textarea id="cap2_highself" data-save placeholder="Come pensa, come parla, come decide, come si muove, cosa non accetta più"></textarea>
+          </div>
+        </section>
+
+        <section id="cap3" class="panel">
+          <span class="eyebrow">Capitolo 3</span>
+          <h2>La struttura invisibile dei grandi risultati</h2>
+          <p>Ogni risultato visibile poggia su fondamenta che quasi nessuno vede: ordine mentale, controllo dell’attenzione, forza emotiva, standard personali, capacità di attraversare il disagio, integrità operativa.</p>
+          <p>Due persone possono avere la stessa opportunità, gli stessi strumenti, la stessa idea e persino lo stesso talento. Ma sarà la qualità della loro struttura interiore a determinare chi saprà sostenere il peso della crescita.</p>
+          <p>Le sei fondamenta della struttura invisibile sono: chiarezza, energia, disciplina, regolazione emotiva, visione e integrità.</p>
+          <div class="score-grid">
+            <div class="field-group"><label class="field-label">Chiarezza (1-10)</label><input type="number" min="1" max="10" data-save id="score_clarity"></div>
+            <div class="field-group"><label class="field-label">Energia (1-10)</label><input type="number" min="1" max="10" data-save id="score_energy"></div>
+            <div class="field-group"><label class="field-label">Disciplina (1-10)</label><input type="number" min="1" max="10" data-save id="score_discipline"></div>
+            <div class="field-group"><label class="field-label">Regolazione emotiva (1-10)</label><input type="number" min="1" max="10" data-save id="score_emotion"></div>
+            <div class="field-group"><label class="field-label">Visione (1-10)</label><input type="number" min="1" max="10" data-save id="score_vision"></div>
+            <div class="field-group"><label class="field-label">Integrità (1-10)</label><input type="number" min="1" max="10" data-save id="score_integrity"></div>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="cap3_work">Su quale fondamento devo lavorare di più?</label>
+            <textarea id="cap3_work" data-save></textarea>
+          </div>
+        </section>
+
+        <section id="cap4" class="panel">
+          <span class="eyebrow">Capitolo 4</span>
+          <h2>Smettere di tradire il proprio livello</h2>
+          <p>Esiste un dolore silenzioso che molte persone non sanno nominare: il dolore di sapere di poter essere molto di più e continuare comunque a vivere al di sotto di sé.</p>
+          <p>Non è il fallimento il punto più basso. Spesso il punto più basso è la consapevolezza di star negoziando continuamente con il proprio potenziale.</p>
+          <p>Lo senti quando rimandi una scelta che sai di dover fare, resti in ambienti che ti abbassano, tolleri abitudini che ti impoveriscono, scegli la comodità invece della verità, ti racconti che non è il momento quando in realtà hai paura di crescere.</p>
+          <div class="field-group">
+            <label class="field-label" for="cap4_betrayal">Dove mi sto tradendo oggi?</label>
+            <textarea id="cap4_betrayal" data-save placeholder="Relazioni, tempo, energia, standard, coraggio, visione..."></textarea>
+          </div>
+        </section>
+
+        <section id="cap5" class="panel">
+          <span class="eyebrow">Capitolo 5</span>
+          <h2>Identità, standard e autoimmagine</h2>
+          <p>Non ottieni in modo stabile ciò che desideri. Ottieni ciò che la tua identità è pronta a sostenere. Se la tua autoimmagine profonda è ancora quella di una persona che dubita troppo, si sminuisce, inizia e non conclude, cerca conferme continue, teme il giudizio, allora ogni crescita esterna entrerà in conflitto con ciò che credi di essere.</p>
+          <p>Per questo il lavoro vero non è soltanto ottenere. È aggiornare l’identità. Le tre leve dell’identità alta sono: standard, narrazione interna e comportamento coerente.</p>
+          <div class="grid-2">
+            <div class="field-group">
+              <label class="field-label" for="cap5_standards">I miei standard non negoziabili</label>
+              <textarea id="cap5_standards" data-save></textarea>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="cap5_narrative">La nuova narrativa che scelgo</label>
+              <textarea id="cap5_narrative" data-save></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section id="cap6" class="panel">
+          <span class="eyebrow">Capitolo 6</span>
+          <h2>Tirare fuori il meglio da sé</h2>
+          <p>La maggior parte delle persone non vive davvero al massimo del proprio potenziale. Vive a una percentuale ridotta di sé. Non perché manchi il valore, ma perché manca attivazione.</p>
+          <p>Tirare fuori il meglio da sé significa smettere di vivere in dispersione e iniziare a raccogliere tutte le proprie forze in una direzione precisa.</p>
+          <p>Le cinque attivazioni del potenziale sono: mentale, fisica, emotiva, esistenziale, operativa.</p>
+          <div class="grid-2">
+            <div class="field-group">
+              <label class="field-label" for="cap6_potential">Le 5 attivazioni del mio potenziale</label>
+              <textarea id="cap6_potential" data-save></textarea>
+            </div>
+            <div class="mini-card">
+              <span class="pill">Lucidità</span>
+              <span class="pill">Corpo</span>
+              <span class="pill">Emozioni</span>
+              <span class="pill">Significato</span>
+              <span class="pill">Azione</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="cap7" class="panel">
+          <span class="eyebrow">Capitolo 7</span>
+          <h2>La disciplina del vertice</h2>
+          <div class="section-image">
+            <img src="https://www.genspark.ai/api/files/s/csB5Gxr2?cache_control=3600" alt="Disciplina e focus" />
+          </div>
+          <div style="margin-top:18px">
+            <p>La disciplina non è privazione. È protezione. Protezione della tua visione, della tua energia, della tua identità, del tuo futuro.</p>
+            <p>Le sette discipline del vertice sono: del pensiero, del corpo, dell’attenzione, della parola, del tempo, emotiva e dell’ambiente.</p>
+          </div>
+          <div class="check-grid">
+            <label class="check-card"><input type="checkbox" id="d1" data-save /><span>Ho protetto il mio focus</span></label>
+            <label class="check-card"><input type="checkbox" id="d2" data-save /><span>Ho curato il corpo</span></label>
+            <label class="check-card"><input type="checkbox" id="d3" data-save /><span>Ho mantenuto ciò che conta</span></label>
+            <label class="check-card"><input type="checkbox" id="d4" data-save /><span>Ho evitato dispersioni inutili</span></label>
+          </div>
+          <div class="field-group" style="margin-top:16px">
+            <label class="field-label" for="cap7_discipline">La disciplina che devo rafforzare adesso</label>
+            <textarea id="cap7_discipline" data-save></textarea>
+          </div>
+        </section>
+
+        <section id="cap8" class="panel">
+          <span class="eyebrow">Capitolo 8</span>
+          <h2>Leadership interiore e potere personale</h2>
+          <p>Prima di guidare un team, un brand, una community o un’impresa, devi saper guidare te stesso. Il potere personale non è dominio sugli altri. È governo di sé.</p>
+          <p>Essere leader di se stessi significa non vittimizzarsi, non perdersi nelle emozioni del momento, non dipendere da approvazione costante, sapersi correggere senza demolirsi, assumersi piena responsabilità del proprio livello.</p>
+          <div class="field-group">
+            <label class="field-label" for="cap8_lead">Dove sto reagendo invece di guidare?</label>
+            <textarea id="cap8_lead" data-save></textarea>
+          </div>
+        </section>
+
+        <section id="cap9" class="panel">
+          <span class="eyebrow">Capitolo 9</span>
+          <h2>Business, vita e statura umana</h2>
+          <p>Il business non è una dimensione separata dal resto della vita. Rifletterà quasi sempre il tuo livello di chiarezza, la tua capacità di sostenere responsabilità, il tuo rapporto con il valore, la tua maturità relazionale e la tua stabilità interna.</p>
+          <p>Se dentro sei frammentato, costruirai in modo frammentato. Se dentro sei ordinato, costruirai in modo più solido. In questo senso il business non è solo un veicolo di guadagno. È una scuola di statura.</p>
+          <div class="field-group">
+            <label class="field-label" for="cap9_align">Dove la mia vita e il mio business sono allineati? Dove no?</label>
+            <textarea id="cap9_align" data-save></textarea>
+          </div>
+        </section>
+
+        <section id="cap10" class="panel">
+          <span class="eyebrow">Capitolo 10</span>
+          <h2>La community elevata</h2>
+          <div class="section-image">
+            <img src="https://www.genspark.ai/api/files/s/8qsARzlq?cache_control=3600" alt="Community elevata" />
+          </div>
+          <div style="margin-top:18px">
+            <p>Nessun percorso alto si sostiene bene nella solitudine assoluta. Chi cresce davvero ha bisogno anche di un contesto che lo ricordi a se stesso, che lo rafforzi, che lo metta davanti a standard più alti e che gli permetta di sentirsi compreso senza essere assecondato nella mediocrità.</p>
+            <p>Una community elevata non è un semplice gruppo che parla di business. È uno spazio di trasformazione in cui crescita personale e imprenditoriale camminano insieme, i legami non sono solo utilitaristici e la presenza conta più dell’apparenza.</p>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="cap10_community">Descrivi la tua community ideale</label>
+            <textarea id="cap10_community" data-save placeholder="Energia, valori, standard, relazioni, visione"></textarea>
+          </div>
+        </section>
+
+        <section id="cap11" class="panel">
+          <span class="eyebrow">Capitolo 11</span>
+          <h2>Il protocollo della versione più alta</h2>
+          <div class="section-image">
+            <img src="https://www.genspark.ai/api/files/s/TlL6UWNU?cache_control=3600" alt="Protocollo dei 90 giorni" />
+          </div>
+          <div style="margin-top:18px">
+            <p>La trasformazione non avviene per intensità emotiva. Avviene per struttura.</p>
+            <p>Le fasi del protocollo sono cinque: interruzione, definizione, costruzione, espansione, consolidamento.</p>
+          </div>
+          <div class="grid-2">
+            <div class="field-group"><label class="field-label" for="cap11_interrupt">Cosa interrompo</label><textarea id="cap11_interrupt" data-save></textarea></div>
+            <div class="field-group"><label class="field-label" for="cap11_define">Cosa definisco</label><textarea id="cap11_define" data-save></textarea></div>
+            <div class="field-group"><label class="field-label" for="cap11_build">Cosa costruisco</label><textarea id="cap11_build" data-save></textarea></div>
+            <div class="field-group"><label class="field-label" for="cap11_expand">Dove mi espando</label><textarea id="cap11_expand" data-save></textarea></div>
+          </div>
+        </section>
+
+        <section id="cap12" class="panel">
+          <span class="eyebrow">Capitolo 12</span>
+          <h2>Il codice del vertice</h2>
+          <p>Ogni persona che vuole vivere davvero in alto ha bisogno di un codice personale. Non un insieme di slogan, ma principi chiari da cui non scendere.</p>
+          <ul>
+            <li>Non vivo in reazione, vivo in direzione.</li>
+            <li>Non abbasso i miei standard per sentirmi accettato.</li>
+            <li>Non uso la paura come ordine, ma come segnale.</li>
+            <li>Non spreco il mio potenziale per comodità.</li>
+            <li>Non tradisco la mia visione per approvazione immediata.</li>
+            <li>Non mi definisco dai giorni bassi, ma da come li attraverso.</li>
+            <li>Non costruisco solo risultati: costruisco statura.</li>
+            <li>Non scelgo ambienti che mi rimpiccioliscono.</li>
+            <li>Non uso il business per nascondermi, ma per esprimermi.</li>
+            <li>Ogni giorno scelgo la versione più alta di me.</li>
+          </ul>
+          <div class="field-group">
+            <label class="field-label" for="cap12_code">Il mio codice personale</label>
+            <textarea id="cap12_code" data-save placeholder="Scrivi qui i tuoi principi personali"></textarea>
+          </div>
+        </section>
+
+        <section id="conclusione" class="panel">
+          <span class="eyebrow">Conclusione</span>
+          <h2>La vita che meriti di abitare</h2>
+          <div class="section-image">
+            <img src="https://www.genspark.ai/api/files/s/PcA5oMWL?cache_control=3600" alt="Summit finale" />
+          </div>
+          <div style="margin-top:18px">
+            <p>Arriva un momento in cui non hai più bisogno di un’altra teoria. Hai bisogno di una decisione. La decisione di non vivere più al di sotto del tuo livello. La decisione di non fare pace con la tua versione ridotta. La decisione di costruire una vita che ti somigli davvero.</p>
+            <p>Il vertice non è un luogo esterno. È uno stato di allineamento tra ciò che sei, ciò che costruisci e ciò che sei disposto a sostenere.</p>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="conclusion_decision">La mia decisione da oggi</label>
+            <textarea id="conclusion_decision" data-save></textarea>
+          </div>
+        </section>
+
+        <section id="bonus" class="panel">
+          <span class="eyebrow">Bonus finali</span>
+          <h2>Le 20 domande del vertice</h2>
+          <details open>
+            <summary>Apri e scrivi le tue risposte</summary>
+            <div class="details-body">
+              <div class="field-group"><label class="field-label">1. Dove sto ancora vivendo sotto il mio livello?</label><textarea data-save id="q1"></textarea></div>
+              <div class="field-group"><label class="field-label">2. Quale paura governa ancora una scelta importante?</label><textarea data-save id="q2"></textarea></div>
+              <div class="field-group"><label class="field-label">3. In quale area della vita sto tollerando troppo?</label><textarea data-save id="q3"></textarea></div>
+              <div class="field-group"><label class="field-label">4. Dove mi sto raccontando una storia che mi indebolisce?</label><textarea data-save id="q4"></textarea></div>
+              <div class="field-group"><label class="field-label">5. Chi sto diventando attraverso le mie abitudini attuali?</label><textarea data-save id="q5"></textarea></div>
+              <div class="field-group"><label class="field-label">6. Le persone attorno a me mi elevano o mi riducono?</label><textarea data-save id="q6"></textarea></div>
+              <div class="field-group"><label class="field-label">7. Sto costruendo risultati o anche statura?</label><textarea data-save id="q7"></textarea></div>
+              <div class="field-group"><label class="field-label">8. Quale ambiente devo lasciare?</label><textarea data-save id="q8"></textarea></div>
+              <div class="field-group"><label class="field-label">9. Quale conversazione devo affrontare?</label><textarea data-save id="q9"></textarea></div>
+              <div class="field-group"><label class="field-label">10. Quale decisione rimando da troppo?</label><textarea data-save id="q10"></textarea></div>
+              <div class="field-group"><label class="field-label">11. Cosa farebbe la mia versione più alta questa settimana?</label><textarea data-save id="q11"></textarea></div>
+              <div class="field-group"><label class="field-label">12. Dove sto cercando approvazione invece di verità?</label><textarea data-save id="q12"></textarea></div>
+              <div class="field-group"><label class="field-label">13. Il mio corpo sta sostenendo o sabotando la mia visione?</label><textarea data-save id="q13"></textarea></div>
+              <div class="field-group"><label class="field-label">14. La mia disciplina è sufficiente al mio prossimo livello?</label><textarea data-save id="q14"></textarea></div>
+              <div class="field-group"><label class="field-label">15. Sto guidando me stesso o sto reagendo alla vita?</label><textarea data-save id="q15"></textarea></div>
+              <div class="field-group"><label class="field-label">16. Che tipo di leader voglio essere?</label><textarea data-save id="q16"></textarea></div>
+              <div class="field-group"><label class="field-label">17. Cosa voglio che la mia presenza lasci negli altri?</label><textarea data-save id="q17"></textarea></div>
+              <div class="field-group"><label class="field-label">18. Quanto è chiaro il mio codice personale?</label><textarea data-save id="q18"></textarea></div>
+              <div class="field-group"><label class="field-label">19. Cosa non voglio più normalizzare?</label><textarea data-save id="q19"></textarea></div>
+              <div class="field-group"><label class="field-label">20. Se smettessi di negoziare con la mia parte più piccola, cosa cambierebbe subito?</label><textarea data-save id="q20"></textarea></div>
+            </div>
+          </details>
+
+          <div class="field-group">
+            <label class="field-label" for="high_declaration">Dichiarazione della versione più alta</label>
+            <textarea id="high_declaration" data-save>Io scelgo di non vivere più sotto il mio livello.
+Io scelgo chiarezza al posto della confusione.
+Io scelgo disciplina al posto dell’inerzia.
+Io scelgo verità al posto dell’autoinganno.
+Io scelgo presenza al posto della dispersione.
+Io scelgo standard alti al posto dell’adattamento al basso.
+Io scelgo di costruire una vita, un business e una mente all’altezza della mia visione.
+Io scelgo di diventare imprenditoriale in ogni area della mia esistenza.</textarea>
+          </div>
+        </section>
+
+        <section id="workbook" class="panel">
+          <span class="eyebrow">Workbook dei 90 giorni</span>
+          <h2>Il protocollo quotidiano per trasformare mente, identità, disciplina e visione imprenditoriale</h2>
+          <p>Questo non è un semplice spazio per prendere appunti. È un ambiente di riallineamento. Per 90 giorni il lettore non è chiamato solo a capire concetti, ma a osservare se stesso con onestà, interrompere vecchi automatismi, alzare i propri standard, sviluppare forza mentale e costruire una postura imprenditoriale reale.</p>
+          <div class="grid-3">
+            <div class="mini-card">
+              <h4>Mese 1 — Reset</h4>
+              <p class="muted">Ripulire la mente, interrompere il caos, ricostruire la base.</p>
+            </div>
+            <div class="mini-card">
+              <h4>Mese 2 — Espansione</h4>
+              <p class="muted">Coraggio, iniziativa, responsabilità, mentalità imprenditoriale.</p>
+            </div>
+            <div class="mini-card">
+              <h4>Mese 3 — Vertice</h4>
+              <p class="muted">Leadership, community, visione, missione, consolidamento.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3>Come usare questo workbook</h3>
+          <ul>
+            <li>Un giorno alla volta</li>
+            <li>Massima onestà nelle risposte</li>
+            <li>Minimo 20 minuti al giorno</li>
+            <li>Una revisione completa ogni 7 giorni</li>
+            <li>Nessuna ricerca di perfezione: cerca trasformazione</li>
+          </ul>
+          <div class="check-grid">
+            <label class="check-card"><input type="checkbox" data-save id="wb_rule1"><span>Mi impegno a usarlo con sincerità</span></label>
+            <label class="check-card"><input type="checkbox" data-save id="wb_rule2"><span>Mi impegno a completare i 90 giorni</span></label>
+            <label class="check-card"><input type="checkbox" data-save id="wb_rule3"><span>Mi impegno a scrivere anche quando è scomodo</span></label>
+            <label class="check-card"><input type="checkbox" data-save id="wb_rule4"><span>Mi impegno a rileggere ciò che scopro</span></label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3>Rituale quotidiano del mattino</h3>
+          <div class="grid-2">
+            <div>
+              <div class="field-group"><label class="field-label" for="morning_energy">Energia da 1 a 10</label><input type="number" min="1" max="10" id="morning_energy" data-save></div>
+              <div class="field-group"><label class="field-label" for="morning_feel">Oggi mi sento</label><textarea id="morning_feel" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="morning_thought">Pensiero dominante di questa mattina</label><textarea id="morning_thought" data-save></textarea></div>
+            </div>
+            <div>
+              <div class="field-group"><label class="field-label" for="morning_identity">La versione di me che scelgo di incarnare oggi</label><textarea id="morning_identity" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="morning_p1">Priorità 1</label><input type="text" id="morning_p1" data-save></div>
+              <div class="field-group"><label class="field-label" for="morning_p2">Priorità 2</label><input type="text" id="morning_p2" data-save></div>
+              <div class="field-group"><label class="field-label" for="morning_p3">Priorità 3</label><input type="text" id="morning_p3" data-save></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3>Rituale serale</h3>
+          <div class="field-group"><label class="field-label" for="night_best">La scelta migliore che ho fatto oggi</label><textarea id="night_best" data-save></textarea></div>
+          <div class="field-group"><label class="field-label" for="night_old">Il momento in cui sono tornato alla vecchia versione di me</label><textarea id="night_old" data-save></textarea></div>
+          <div class="field-group"><label class="field-label" for="night_learn">Cosa ho imparato su di me oggi</label><textarea id="night_learn" data-save></textarea></div>
+          <div class="field-group"><label class="field-label" for="night_fix">Cosa correggo domani</label><textarea id="night_fix" data-save></textarea></div>
+        </section>
+
+        <section class="panel">
+          <h3>Tracker quotidiano minimal</h3>
+          <div class="check-grid">
+            <label class="check-card"><input type="checkbox" data-save id="trk1"><span>Mi sono alzato con intenzione</span></label>
+            <label class="check-card"><input type="checkbox" data-save id="trk2"><span>Ho protetto la prima parte della giornata</span></label>
+            <label class="check-card"><input type="checkbox" data-save id="trk3"><span>Ho svolto l’azione più importante</span></label>
+            <label class="check-card"><input type="checkbox" data-save id="trk4"><span>Ho fatto una cosa scomoda ma utile</span></label>
+            <label class="check-card"><input type="checkbox" data-save id="trk5"><span>Ho curato il corpo</span></label>
+            <label class="check-card"><input type="checkbox" data-save id="trk6"><span>Ho osservato il mio dialogo interno</span></label>
+            <label class="check-card"><input type="checkbox" data-save id="trk7"><span>Ho evitato dispersioni inutili</span></label>
+            <label class="check-card"><input type="checkbox" data-save id="trk8"><span>Ho agito con più identità che umore</span></label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Mese 1 — Reset</h2>
+          <p>Ripulire la mente, interrompere il caos, ricostruire la base.</p>
+          <div id="month1"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Mese 2 — Espansione</h2>
+          <p>Rafforzare mentalità, coraggio, comunicazione e azione imprenditoriale.</p>
+          <div id="month2"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Mese 3 — Vertice</h2>
+          <p>Consolidare identità, leadership, relazioni e visione di alto livello.</p>
+          <div id="month3"></div>
+        </section>
+
+        <section id="dailytemplate" class="panel">
+          <h2>Pagina giornaliera premium</h2>
+          <div class="grid-2">
+            <div>
+              <div class="field-group"><label class="field-label" for="daily_date">Data</label><input type="date" id="daily_date" data-save></div>
+              <div class="field-group"><label class="field-label" for="daily_state">Stato interiore</label><textarea id="daily_state" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="daily_leave">Pensiero che devo lasciare oggi</label><textarea id="daily_leave" data-save></textarea></div>
+            </div>
+            <div>
+              <div class="field-group"><label class="field-label" for="daily_grow">Pensiero che devo coltivare oggi</label><textarea id="daily_grow" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="daily_action">Azione chiave del giorno</label><textarea id="daily_action" data-save></textarea></div>
+              <div class="field-group"><label class="field-label" for="daily_nonneg">Cosa non negozio oggi</label><textarea id="daily_nonneg" data-save></textarea></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="weeklyreview" class="panel">
+          <h2>Revisione settimanale premium</h2>
+          <div class="grid-2">
+            <div class="field-group"><label class="field-label" for="week_vote">Voto della settimana</label><input type="number" min="1" max="10" id="week_vote" data-save></div>
+            <div class="field-group"><label class="field-label" for="week_win">La vittoria più importante</label><textarea id="week_win" data-save></textarea></div>
+            <div class="field-group"><label class="field-label" for="week_pattern">Il vecchio schema che è riemerso</label><textarea id="week_pattern" data-save></textarea></div>
+            <div class="field-group"><label class="field-label" for="week_lesson">La lezione più grande</label><textarea id="week_lesson" data-save></textarea></div>
+            <div class="field-group"><label class="field-label" for="week_standard">Lo standard che alzo da ora</label><textarea id="week_standard" data-save></textarea></div>
+            <div class="field-group"><label class="field-label" for="week_identity">La versione di me che sto diventando</label><textarea id="week_identity" data-save></textarea></div>
+          </div>
+        </section>
+
+        <section id="monthlyreset" class="panel">
+          <h2>Reset di fine mese</h2>
+          <div class="field-group"><label class="field-label" for="month_learn">In questo mese ho imparato che…</label><textarea id="month_learn" data-save></textarea></div>
+          <div class="field-group"><label class="field-label" for="month_change">La mia identità è cambiata in questo modo…</label><textarea id="month_change" data-save></textarea></div>
+          <div class="field-group"><label class="field-label" for="month_habits">Le mie abitudini migliori sono diventate…</label><textarea id="month_habits" data-save></textarea></div>
+          <div class="field-group"><label class="field-label" for="month_nonorm">Le cose che non voglio più normalizzare sono…</label><textarea id="month_nonorm" data-save></textarea></div>
+          <div class="field-group"><label class="field-label" for="month_next">Il mio prossimo livello richiede che io…</label><textarea id="month_next" data-save></textarea></div>
+        </section>
+
+        <section id="finalreader" class="panel">
+          <h2>Dichiarazione finale del lettore</h2>
+          <p>Se questo percorso è stato vissuto davvero, non avrai soltanto più motivazione. Avrai più chiarezza mentale, più disciplina, più autostima reale, più visione, più forza emotiva, più identità imprenditoriale, più presenza e più selezione relazionale.</p>
+          <div class="field-group"><label class="field-label" for="final_reader">Chi sono diventato dopo questo percorso</label><textarea id="final_reader" data-save></textarea></div>
+          <div class="grid-2">
+            <div class="field-group"><label class="field-label" for="final_sign">Firma</label><input type="text" id="final_sign" data-save></div>
+            <div class="field-group"><label class="field-label" for="final_date">Data</label><input type="date" id="final_date" data-save></div>
+          </div>
+        </section>
+
+        <p class="footer-note">Questa versione completa del libro salva localmente ciò che il lettore scrive nel browser. In una fase successiva potrà essere pubblicata online o confezionata in un pacchetto pronto alla vendita.</p>
+      </div>
+    </main>
+  </div>
+
+  <div class="floating-save" id="saveIndicator">Salvataggio attivo</div>
+
+  <script>
+    const STORAGE_KEY = "il_vertice_complete_v2";
+    const LAST_SECTION_KEY = "il_vertice_last_section_v2";
+    const saveIndicator = document.getElementById("saveIndicator");
+    const lastSaved = document.getElementById("lastSaved");
+
+    const month1Data = [
+      ["Giorno 1 — Fotografia della realtà", "Scrivi con totale onestà chi sei oggi, dove ti senti forte, dove sei bloccato, cosa stai tollerando da troppo tempo e cosa desideri davvero."],
+      ["Giorno 2 — Il costo della tua versione attuale", "Elenca tutto ciò che ti costa restare come sei: energia, tempo, soldi, occasioni, fiducia, serenità, relazioni."],
+      ["Giorno 3 — I pensieri che ti sabotano", "Osserva i 10 pensieri ricorrenti che ti indeboliscono e riscrivi per ciascuno una nuova verità potenziante."],
+      ["Giorno 4 — Pulizia dell’ambiente", "Riordina il tuo spazio esterno e digitale. Elimina ciò che alimenta rumore, caos e dispersione."],
+      ["Giorno 5 — Il tuo tempo dice chi sei", "Analizza come hai usato il tuo tempo nelle ultime 48 ore e osserva dove vivi in direzione o in reazione."],
+      ["Giorno 6 — Il dialogo interiore", "Osserva come ti parli per un’intera giornata. Quale tono usi con te stesso?"],
+      ["Giorno 7 — Revisione della prima settimana", "Scrivi cosa hai capito di te, dove ti stai tradendo e dove stai già cambiando."],
+      ["Giorno 8 — Chi stai diventando", "Descrivi la tua versione imprenditoriale più alta."],
+      ["Giorno 9 — Standard non negoziabili", "Definisci 10 standard personali che non vuoi più violare."],
+      ["Giorno 10 — La tua nuova narrativa", "Scrivi il racconto vecchio che hai su di te e poi il racconto nuovo che scegli da oggi."],
+      ["Giorno 11 — Il rispetto di sé", "Annota 5 comportamenti con cui ti manchi di rispetto e 5 modi nuovi con cui inizierai a rispettarti."],
+      ["Giorno 12 — Decisioni rimandate", "Fai una lista delle decisioni che stai rimandando. Scegline una e chiudila oggi."],
+      ["Giorno 13 — Valori reali", "Scrivi i tuoi 7 valori principali e chiediti se li stai vivendo davvero."],
+      ["Giorno 14 — Revisione identitaria", "Chi sto lasciando indietro? Chi sto diventando? Cosa sta cambiando nella mia postura mentale?"],
+      ["Giorno 15 — Audit energetico", "Cosa ti dà energia e cosa te la toglie? Crea due liste sincere."],
+      ["Giorno 16 — Il corpo come alleato", "Fai un’azione concreta di rispetto fisico e annota come cambia la tua lucidità."],
+      ["Giorno 17 — La prima ora della giornata", "Progetta una morning routine minima: silenzio, acqua, journaling, movimento, priorità."],
+      ["Giorno 18 — Focus assoluto", "Lavora 60 minuti senza distrazioni su una sola cosa importante."],
+      ["Giorno 19 — La fatica utile", "Fai una cosa che stai evitando da tempo perché scomoda."],
+      ["Giorno 20 — Coerenza", "Scegli 3 micro-impegni e mantienili perfettamente oggi."],
+      ["Giorno 21 — Revisione disciplina", "Dove sono forte? Dove cedo facilmente? Quale abitudine mi farebbe crescere più in fretta?"],
+      ["Giorno 22 — Il tuo valore", "Scrivi 20 cose che sai fare bene o che hai superato nella vita."],
+      ["Giorno 23 — La trasformazione che incarni", "Quale parte della tua storia può diventare valore per altri?"],
+      ["Giorno 24 — Paura del giudizio", "Scrivi i 5 giudizi che temi di più dagli altri."],
+      ["Giorno 25 — Il coraggio dell’esposizione", "Fai una piccola azione visibile: pubblica, esprimi, contatta, proponi."],
+      ["Giorno 26 — Visione a 12 mesi", "Scrivi nel dettaglio dove vuoi essere tra un anno mentalmente, economicamente, fisicamente, relazionalmente e imprenditorialmente."],
+      ["Giorno 27 — Il tuo perché", "Scrivi almeno 15 ragioni profonde per cui vuoi crescere davvero."],
+      ["Giorno 28 — Revisione del primo mese", "Cosa è cambiato in me? Dove sono più forte? Dove devo essere più rigoroso?"],
+      ["Giorno 29 — Lettera alla vecchia versione", "Scrivi una lettera alla tua vecchia identità e congedala con rispetto."],
+      ["Giorno 30 — Manifesto del nuovo inizio", "Scrivi 10 righe che iniziano con: Da oggi scelgo di…"]
+    ];
+
+    const month2Data = [
+      ["Giorno 31 — Smettere di aspettare", "Scrivi 5 cose che aspetti da troppo e inizia una cosa oggi."],
+      ["Giorno 32 — Imperfezione produttiva", "Fai qualcosa di imperfetto ma reale."],
+      ["Giorno 33 — I 3 blocchi principali", "Individua la paura principale, la scusa principale e l’abitudine che più ti rallenta."],
+      ["Giorno 34 — Allenamento alla decisione", "Prendi velocemente 5 piccole decisioni che di solito rimandi."],
+      ["Giorno 35 — Allenamento alla responsabilità", "Per un’intera giornata non dare colpa a nulla e nessuno."],
+      ["Giorno 36 — Azione ad alto impatto", "Qual è l’azione che ti farebbe avanzare di più se la facessi oggi? Falla."],
+      ["Giorno 37 — Revisione dell’azione", "Cosa ti ha bloccato? Cosa ti ha acceso? Cosa hai imparato sul tuo modo di funzionare?"],
+      ["Giorno 38 — Risolvere problemi", "Scrivi 10 problemi reali che le persone vivono nel tuo settore o nella tua esperienza."],
+      ["Giorno 39 — Pensiero da costruttore", "Prendi un problema personale e scrivi 10 possibili soluzioni."],
+      ["Giorno 40 — Valore", "Scrivi: cosa posso offrire, chi posso aiutare, cosa so trasformare, quale esperienza posso mettere a servizio."],
+      ["Giorno 41 — Autoimmagine economica", "Osserva il tuo rapporto con denaro, valore, meritare e visibilità."],
+      ["Giorno 42 — Tolleranza al rifiuto", "Fai una piccola azione che potrebbe ricevere un no."],
+      ["Giorno 43 — Visione da leader", "Che impatto voglio avere? Che persona devo diventare per sostenerlo?"],
+      ["Giorno 44 — Revisione imprenditoriale", "Penso ancora troppo da esecutore? Dove sto sviluppando visione?"],
+      ["Giorno 45 — Silenzio strategico", "20 minuti senza telefono, musica o stimoli. Solo tu e la tua mente."],
+      ["Giorno 46 — Il disagio come allenamento", "Fai qualcosa che richiede autocontrollo: doccia fredda, allenamento, camminata lunga, lavoro profondo."],
+      ["Giorno 47 — Resistenza mentale", "Concludi un compito noioso ma importante senza interromperti."],
+      ["Giorno 48 — Non reagire", "Per tutta la giornata, prima di ogni risposta difficile, fai 3 respiri profondi."],
+      ["Giorno 49 — Distacco dal giudizio", "Chi mi condiziona ancora? Perché? Cosa farei se il suo giudizio non avesse peso?"],
+      ["Giorno 50 — La tua soglia attuale", "In quali contesti ti restringi ancora?"],
+      ["Giorno 51 — Revisione forza mentale", "Sono più forte quando… Crollo quando… Da oggi mi alleno a…"],
+      ["Giorno 52 — Come parli di te", "Scrivi 10 frasi che usi per presentarti e rendile più forti e chiare."],
+      ["Giorno 53 — Presenza", "In ogni conversazione di oggi, ascolta davvero prima di rispondere."],
+      ["Giorno 54 — Voce imprenditoriale", "Scrivi un testo breve su ciò in cui credi davvero."],
+      ["Giorno 55 — Confini", "Scrivi 5 situazioni in cui dici sì ma vorresti dire no."],
+      ["Giorno 56 — Il tuo messaggio", "Scrivi in 5 righe cosa vuoi che le persone capiscano quando entrano nel tuo mondo."],
+      ["Giorno 57 — Espansione relazionale", "Contatta una persona che stimi o con cui vuoi creare una connessione di livello."],
+      ["Giorno 58 — Revisione presenza", "La mia presenza è forte o incerta? Dove comunico con verità? Dove mi nascondo?"],
+      ["Giorno 59 — Rituale di riallineamento", "Fai una revisione generale di metà percorso."],
+      ["Giorno 60 — Nuova decisione", "Scrivi una decisione importante per il tuo prossimo mese."]
+    ];
+
+    const month3Data = [
+      ["Giorno 61 — Chi guida dentro di te?", "Scrivi quali parti ti guidano più spesso: paura, ego, confusione, visione, verità, disciplina."],
+      ["Giorno 62 — Comando interiore", "Scegli una regola forte per oggi e rispettala senza eccezioni."],
+      ["Giorno 63 — Maturità", "Scrivi 3 situazioni recenti in cui potevi reagire meglio. Riscrivile."],
+      ["Giorno 64 — Responsabilità piena", "Prendi un problema attuale e scrivi solo ciò che dipende da te."],
+      ["Giorno 65 — Integrità", "Dove dici una cosa e ne fai un’altra? Riallinea un punto oggi."],
+      ["Giorno 66 — Leadership silenziosa", "Aiuta qualcuno senza cercare riconoscimento."],
+      ["Giorno 67 — Revisione leadership", "Che tipo di guida sei per te stesso? Che tipo di guida vuoi diventare per gli altri?"],
+      ["Giorno 68 — Le tue persone", "Mappa chi ti eleva, chi ti svuota, chi ti ispira, chi ti distrae."],
+      ["Giorno 69 — Relazioni vere", "Scrivi cosa significa per te creare legami anche fuori dal business."],
+      ["Giorno 70 — Appartenenza", "Scrivi il manifesto dell’ambiente che vuoi costruire o trovare."],
+      ["Giorno 71 — Conversazione reale", "Cerca una conversazione profonda con una persona importante."],
+      ["Giorno 72 — Dare valore", "Fai qualcosa di utile per qualcuno della tua rete o community."],
+      ["G
