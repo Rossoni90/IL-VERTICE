@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IL VERTICE — Libro Virtuale Interattivo</title>
+  <style>
+    :root{
+      --bg:#07111d;
+      --bg2:#0d1828;
+      --panel:rgba(10,18,31,.85);
+      --soft:rgba(255,255,255,.04);
+      --line:rgba(255,255,255,.08);
+      --text:#eef4ff;
+      --muted:#9fb0ca;
+      --gold:#d6b06a;
+      --gold2:#f2dbab;
+      --accent:#74a9ff;
+      --ok:#7de2b8;
+      --danger:#ff9b9b;
+      --radius:22px;
+      --shadow:0 24px 50px rgba(0,0,0,.32);
+      --max:1180px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      line-height:1.7;
+      background:
+        radial-gradient(circle at top right, rgba(116,169,255,.12), transparent 18%),
+        radial-gradient(circle at top left, rgba(214,176,106,.10), transparent 18%),
+        linear-gradient(180deg,#040b14,#08111d 35%,#07111d 100%);
+    }
+
+    img{max-width:100%;display:block}
+    a{text-decoration:none;color:var(--gold2)}
+    h1,h2,h3,h4{
+      margin:0 0 14px;
+      line-height:1.15;
+      font-family:Georgia,"Times New Roman",serif;
+      letter-spacing:.2px;
+    }
+    h1{font-size:clamp(2.5rem,5vw,4.7rem)}
+    h2{font-size:clamp(1.6rem,3vw,2.7rem)}
+    h3{font-size:clamp(1.2rem,2.2vw,1.55rem)}
+    p{margin:0 0 16px}
+
+    .shell{
+      display:grid;
+      grid-template-columns:300px 1fr;
+      min-height:100vh;
+    }
+
+    .sidebar{
+      position:sticky;
+      top:0;
+      height:100vh;
+      overflow:auto;
+      padding:20px;
+      background:rgba(4,10,18,.82);
+      backdrop-filter:blur(12px);
+      border-right:1px solid var(--line);
+    }
+
+    .brand{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+      margin-bottom:18px;
+    }
+
+    .logo{
+      width:46px;
+      height:46px;
+      border-radius:14px;
+      background:linear-gradient(135deg,var(--gold),#7c5d2a);
+      box-shadow:0 10px 24px rgba(214,176,106,.24);
+      flex:0 0 auto;
+    }
+
+    .brand h3{margin:0;font-size:1.08rem}
+    .brand p{margin:2px 0 0;font-size:.88rem;color:var(--muted)}
+
+    .nav-title{
+      font-size:.8rem;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      color:var(--gold2);
+      margin:20px 0 10px;
+    }
+
+    .nav{
+      display:grid;
+      gap:8px;
+    }
+
+    .nav a{
+      display:block;
+      padding:10px 12px;
+      border-radius:12px;
+      color:var(--text);
+      font-size:.94rem;
+      border:1px solid transparent;
+      transition:.15s ease;
+    }
+
+    .nav a:hover,
+    .nav a.active{
+      background:rgba(255,255,255,.05);
+      border-color:var(--line);
+    }
+
+    .sidebar-actions{
+      display:grid;
+      gap:10px;
+      margin-top:18px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+    }
+
+    button,.btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:700;
+      background:linear-gradient(135deg,var(--gold2),var(--gold));
+      color:#08111b;
+      box-shadow:0 10px 25px rgba(214,176,106,.16);
+      transition:transform .15s ease, opacity .2s ease;
+    }
+
+    button:hover,.btn:hover{transform:translateY(-1px)}
+
+    .btn-secondary{
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border:1px solid var(--line);
+      box-shadow:none;
+    }
+
+    .btn-danger{
+      background:linear-gradient(135deg,#ffc1c1,var(--danger));
+      color:#2d0b0b;
+    }
+
+    .main{min-width:0}
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:14px 22px;
+      background:rgba(4,10,18,.78);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--line);
+    }
+
+    .badges{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:.87rem;
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      color:var(--muted);
+    }
+
+    .dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:var(--ok);
+    }
+
+    .container{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:26px 22px 90px;
+    }
+
+    .hero{
+      position:relative;
+      overflow:hidden;
+      border-radius:34px;
+      border:1px solid var(--line);
+      min-height:580px;
+      background:#091320;
+      box-shadow:var(--shadow);
+      margin-bottom:24px;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(5,10,18,.18), rgba(5,10,18,.75)),
+        url('assets/hero.jpg') center/cover no-repeat;
+    }
+
+    .hero-inner{
+      position:relative;
+      max-width:860px;
+      padding:74px 40px 40px;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--gold2);
+      font-size:.84rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-bottom:18px;
+    }
+
+    .lead{
+      max-width:760px;
+      font-size:1.08rem;
+      color:#dce7fb;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:24px;
+      margin-bottom:22px;
+      box-shadow:var(--shadow);
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+    }
+
+    .mini-card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      background:rgba(255,255,255,.03);
+    }
+
+    .section-image{
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background:#08111a;
+    }
+
+    .quote{
+      padding:18px 20px;
+      border-left:3px solid var(--gold);
+      background:rgba(255,255,255,.03);
+      border-radius:14px;
+      font-style:italic;
+      color:#f4f7fe;
+    }
+
+    .field-group{margin-bottom:16px}
+    .field-label{
+      display:block;
+      margin:0 0 8px;
+      color:var(--gold2);
+      font-weight:700;
+      font-size:.94rem;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    textarea{
+      width:100%;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:14px 15px;
+      outline:none;
+      font:inherit;
+      transition:.18s ease;
+    }
+
+    textarea{
+      min-height:130px;
+      resize:vertical;
+    }
+
+    input:focus,textarea:focus{
+      border-color:rgba(214,176,106,.72);
+      background:rgba(255,255,255,.06);
+    }
+
+    .muted{color:var(--muted)}
+
+    .check-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .check-card{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+    }
+
+    .check-card input{
+      margin-top:4px;
+      transform:scale(1.15);
+      accent-color:var(--gold);
+    }
+
+    .floating-save{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:30;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(6,16,29,.94);
+      border:1px solid var(--line);
+      color:var(--text);
+      box-shadow:var(--shadow);
+      font-size:.9rem;
+    }
+
+    .progress-wrap{margin:14px 0 0}
+    .progress-top{
+      display:flex;
+      justify-content:space-between;
+      color:var(--muted);
+      font-size:.86rem;
+      margin-bottom:8px;
+    }
+    .progress-bar{
+      height:8px;
+      border-radius:999px;
+      overflow:hidden;
+      background:rgba(255,255,255,.08);
+    }
+    .progress-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--gold),var(--accent));
+      transition:width .2s ease;
+    }
+
+    details{
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      background:rgba(255,255,255,.03);
+      margin-bottom:14px;
+    }
+
+    details summary{
+      cursor:pointer;
+      list-style:none;
+      padding:18px 20px;
+      font-weight:800;
+      background:rgba(255,255,255,.02);
+    }
+
+    details summary::-webkit-details-marker{display:none}
+    .details-body{padding:18px 20px}
+
+    .footer-note{
+      text-align:center;
+      color:var(--muted);
+      font-size:.92rem;
+      margin-top:28px;
+    }
+
+    @media(max-width:980px){
+      .shell{grid-template-columns:1fr}
+      .sidebar{
+        position:relative;
+        height:auto;
+        border-right:none;
+        border-bottom:1px solid var(--line);
+      }
+      .grid-2,.grid-3,.check-grid{grid-template-columns:1fr}
+      .container{padding:18px 16px 80px}
+      .topbar{padding:12px 16px}
+      .hero{min-height:480px}
+      .hero-inner{padding:56px 22px 26px}
+    }
+
+    @media print{
+      .sidebar,.topbar,.floating-save,.hero-actions,.sidebar-actions{display:none!important}
+      .shell{display:block}
+      body{background:#fff;color:#111}
+      .panel,.hero,.section-image,.mini-card,details{
+        background:#fff!important;
+        color:#111!important;
+        box-shadow:none!important;
+        border:1px solid #ddd!important;
+      }
+      input,textarea{
+        color:#111!important;
+        border:1px solid #ccc!important;
+        background:#fff!important;
+      }
+      .field-label,h1,h2,h3,a{color:#111!important}
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo"></div>
+        <div>
+          <h3>IL VERTICE</h3>
+          <p>Libro virtuale interattivo</p>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span>Progresso lettura</span>
+          <span id="progressText">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <div class="nav-title">Indice</div>
+      <nav class="nav" id="toc">
+        <a href="#cover">Copertina</a>
+        <a href="#welcome">Benvenuto</a>
+        <a href="#nota">Nota editoriale</a>
+        <a href="#cap1">1. Il successo che regge davvero</a>
+        <a href="#cap2">2. Il richiamo del tuo io imprenditoriale</a>
+        <a href="#cap7">7. La disciplina del vertice</a>
+        <a href="#cap10">10. La community elevata</a>
+        <a href="#cap11">11. Il protocollo della versione più alta</a>
+        <a href="#conclusione">Conclusione</a>
+        <a href="#bonus">Bonus</a>
+        <a href="#workbook">Workbook</a>
+        <a href="#finalreader">Dichiarazione finale</a>
+      </nav>
+
+      <div class="sidebar-actions">
+        <button class="btn-secondary" id="continueBtn">Continua da dove eri rimasto</button>
+        <button class="btn-secondary" id="exportBtn">Esporta i miei appunti</button>
+        <button class="btn-secondary" id="importBtn">Importa i miei appunti</button>
+        <button class="btn-secondary" onclick="window.print()">Modalità stampa</button>
+        <button class="btn-danger" id="resetBtn">Reset guidato</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" />
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="badges">
+          <div class="badge"><span class="dot"></span> Salvataggio attivo</div>
+          <div class="badge">Immagini locali</div>
+          <div class="badge">Versione stabile</div>
+        </div>
+        <div class="badge" id="lastSaved">Pronto</div>
+      </div>
+
+      <div class="container">
+
+        <section id="cover" class="hero">
+          <div class="hero-inner">
+            <span class="eyebrow">Libro virtuale premium</span>
+            <h1>IL VERTICE</h1>
+            <p class="lead">
+              La via reale per costruire il tuo io imprenditoriale, raggiungere il successo autentico
+              e diventare la versione più alta di te.
+            </p>
+            <div class="hero-actions">
+              <a class="btn" href="#welcome">Inizia il libro</a>
+              <a class="btn btn-secondary" href="#workbook">Vai al workbook</a>
+            </div>
+          </div>
+        </section>
+
+        <section id="welcome" class="panel">
+          <div class="grid-2">
+            <div class="section-image">
+              <img src="assets/cover.jpg" alt="Copertina Il Vertice" />
+            </div>
+            <div>
+              <h2>Benvenuto nel tuo spazio di trasformazione</h2>
+              <p>
+                Questo file non è un semplice documento. È un libro virtuale interattivo da aprire,
+                leggere, compilare e vivere. Dentro trovi testo, esercizi, guide, check, riflessioni
+                e un workbook da 90 giorni.
+              </p>
+
+              <div class="field-group">
+                <label class="field-label" for="reader_name">Il tuo nome</label>
+                <input type="text" id="reader_name" data-save placeholder="Scrivi il tuo nome" />
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="reader_start">Data di inizio</label>
+                <input type="date" id="reader_start" data-save />
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="reader_reason">Perché hai scelto di iniziare questo percorso</label>
+                <textarea id="reader_reason" data-save placeholder="Scrivi la tua motivazione reale"></textarea>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="reader_transform">Cosa vuoi trasformare davvero</label>
+                <textarea id="reader_transform" data-save placeholder="Scrivi cosa vuoi cambiare in profondità"></textarea>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="nota" class="panel">
+          <span class="eyebrow">Nota editoriale</span>
+          <h2>Questo libro non nasce per intrattenere. Nasce per trasformare.</h2>
+          <p>
+            Non è stato scritto per chi cerca una spinta momentanea o una motivazione veloce.
+            È stato scritto per chi sente di non essere qui per vivere in piccolo.
+          </p>
+          <p>
+            Queste pagine parlano di successo autentico, identità imprenditoriale, forza mentale,
+            disciplina, visione, relazioni, standard, leadership personale e statura interiore.
+          </p>
+          <div class="quote">“Sto davvero vivendo all’altezza di ciò che potrei essere?”</div>
+        </section>
+
+        <section id="cap1" class="panel">
+          <span class="eyebrow">Capitolo 1</span>
+          <h2>Il successo che regge davvero</h2>
+          <p>
+            Il mondo ti ha insegnato a riconoscere il successo dalle sue forme visibili:
+            denaro, status, risultati, libertà, riconoscimento, impatto. Ma quasi nessuno
+            ti ha spiegato la domanda decisiva: come sostenerlo?
+          </p>
+          <p>
+            Il successo reale non è quello che arriva soltanto. È quello che resta,
+            cresce e si approfondisce senza distruggerti.
+          </p>
+          <div class="grid-2">
+            <div class="field-group">
+              <label class="field-label" for="cap1_success">Che idea ho oggi del successo?</label>
+              <textarea id="cap1_success" data-save></textarea>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="cap1_real">Cosa significa per me un successo che regge?</label>
+              <textarea id="cap1_real" data-save></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section id="cap2" class="panel">
+          <span class="eyebrow">Capitolo 2</span>
+          <h2>Il richiamo del tuo io imprenditoriale</h2>
+          <div class="section-image">
+            <img src="assets/identita.jpg" alt="Trasformazione identitaria" />
+          </div>
+          <div style="margin-top:18px">
+            <p>
+              Dentro di te esiste già una versione più alta. Non è fantasia.
+              È potenziale non ancora pienamente organizzato.
+            </p>
+            <p>
+              Il tuo io imprenditoriale coincide con ciò che sei capace di diventare
+              quando smetti di vivere in reazione e inizi a vivere in direzione.
+            </p>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="cap2_highself">Descrivi la tua versione imprenditoriale più alta</label>
+            <textarea id="cap2_highself" data-save></textarea>
+          </div>
+        </section>
+
+        <section id="cap7" class="panel">
+          <span class="eyebrow">Capitolo 7</span>
+          <h2>La disciplina del vertice</h2>
+          <div class="section-image">
+            <img src="assets/disciplina.jpg" alt="Disciplina e focus" />
+          </div>
+          <div style="margin-top:18px">
+            <p>
+              La disciplina non è privazione. È protezione della tua visione,
+              della tua energia, della tua identità e del tuo futuro.
+            </p>
+          </div>
+          <div class="check-grid">
+            <label class="check-card"><input type="checkbox" id="d1" data-save /><span>Ho protetto il mio focus</span></label>
+            <label class="check-card"><input type="checkbox" id="d2" data-save /><span>Ho curato il corpo</span></label>
+            <label class="check-card"><input type="checkbox" id="d3" data-save /><span>Ho mantenuto ciò che conta</span></label>
+            <label class="check-card"><input type="checkbox" id="d4" data-save /><span>Ho evitato dispersioni inutili</span></label>
+          </div>
+          <div class="field-group" style="margin-top:16px">
+            <label class="field-label" for="cap7_discipline">La disciplina che devo rafforzare adesso</label>
+            <textarea id="cap7_discipline" data-save></textarea>
+          </div>
+        </section>
+
+        <section id="cap10" class="panel">
+          <span class="eyebrow">Capitolo 10</span>
+          <h2>La community elevata</h2>
+          <div class="section-image">
+            <img src="assets/community.jpg" alt="Community elevata" />
+          </div>
+          <div style="margin-top:18px">
+            <p>
+              Una community elevata non è un semplice gruppo che parla di business.
+              È uno spazio di trasformazione in cui crescita personale e imprenditoriale
+              camminano insieme.
+            </p>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="cap10_community">Descrivi la tua community ideale</label>
+            <textarea id="cap10_community" data-save></textarea>
+          </div>
+        </section>
+
+        <section id="cap11" class="panel">
+          <span class="eyebrow">Capitolo 11</span>
+          <h2>Il protocollo della versione più alta</h2>
+          <div class="section-image">
+            <img src="assets/protocollo.jpg" alt="Protocollo dei 90 giorni" />
+          </div>
+          <div style="margin-top:18px">
+            <p>
+              La trasformazione non avviene per intensità emotiva. Avviene per struttura.
+            </p>
+          </div>
+          <div class="grid-2">
+            <div class="field-group">
+              <label class="field-label" for="cap11_interrupt">Cosa interrompo</label>
+              <textarea id="cap11_interrupt" data-save></textarea>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="cap11_define">Cosa definisco</label>
+              <textarea id="cap11_define" data-save></textarea>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="cap11_build">Cosa costruisco</label>
+              <textarea id="cap11_build" data-save></textarea>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="cap11_expand">Dove mi espando</label>
+              <textarea id="cap11_expand" data-save></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section id="conclusione" class="panel">
+          <span class="eyebrow">Conclusione</span>
+          <h2>La vita che meriti di abitare</h2>
+          <div class="section-image">
+            <img src="assets/finale.jpg" alt="Summit finale" />
+          </div>
+          <div style="margin-top:18px">
+            <p>
+              Arriva un momento in cui non hai più bisogno di un’altra teoria.
+              Hai bisogno di una decisione.
+            </p>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="conclusion_decision">La mia decisione da oggi</label>
+            <textarea id="conclusion_decision" data-save></textarea>
+          </div>
+        </section>
+
+        <section id="bonus" class="panel">
+          <span class="eyebrow">Bonus finali</span>
+          <h2>Le 20 domande del vertice</h2>
+          <details open>
+            <summary>Apri e scrivi le tue risposte</summary>
+            <div class="details-body">
+              <div class="field-group"><label class="field-label">1. Dove sto ancora vivendo sotto il mio livello?</label><textarea id="q1" data-save></textarea></div>
+              <div class="field-group"><label class="field-label">2. Quale paura governa ancora una scelta importante?</label><textarea id="q2" data-save></textarea></div>
+              <div class="field-group"><label class="field-label">3. In quale area della vita sto tollerando troppo?</label><textarea id="q3" data-save></textarea></div>
+              <div class="field-group"><label class="field-label">4. Dove mi sto raccontando una storia che mi indebolisce?</label><textarea id="q4" data-save></textarea></div>
+              <div class="field-group"><label class="field-label">5. Chi sto diventando attraverso le mie abitudini attuali?</label><textarea id="q5" data-save></textarea></div>
+            </div>
+          </details>
+        </section>
+
+        <section id="workbook" class="panel">
+          <span class="eyebrow">Workbook dei 90 giorni</span>
+          <h2>Il protocollo quotidiano per trasformare mente, identità, disciplina e visione imprenditoriale</h2>
+          <div class="grid-3">
+            <div class="mini-card">
+              <h3>Mese 1 — Reset</h3>
+              <p class="muted">Ripulire la mente, interrompere il caos, ricostruire la base.</p>
+            </div>
+            <div class="mini-card">
+              <h3>Mese 2 — Espansione</h3>
+              <p class="muted">Coraggio, iniziativa, responsabilità, mentalità imprenditoriale.</p>
+            </div>
+            <div class="mini-card">
+              <h3>Mese 3 — Vertice</h3>
+              <p class="muted">Leadership, community, visione, missione, consolidamento.</p>
+            </div>
+          </div>
+
+          <div class="field-group" style="margin-top:18px">
+            <label class="field-label" for="morning_energy">Energia da 1 a 10</label>
+            <input type="number" min="1" max="10" id="morning_energy" data-save />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="morning_thought">Pensiero dominante di questa mattina</label>
+            <textarea id="morning_thought" data-save></textarea>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="morning_identity">La versione di me che scelgo di incarnare oggi</label>
+            <textarea id="morning_identity" data-save></textarea>
+          </div>
+
+          <div class="check-grid">
+            <label class="check-card"><input type="checkbox" id="t1" data-save /><span>Mi sono alzato con intenzione</span></label>
+            <label class="check-card"><input type="checkbox" id="t2" data-save /><span>Ho protetto la prima parte della giornata</span></label>
+            <label class="check-card"><input type="checkbox" id="t3" data-save /><span>Ho svolto l’azione più importante</span></label>
+            <label class="check-card"><input type="checkbox" id="t4" data-save /><span>Ho agito con più identità che umore</span></label>
+          </div>
+
+          <div class="field-group" style="margin-top:16px">
+            <label class="field-label" for="evening_best">La scelta migliore che ho fatto oggi</label>
+            <textarea id="evening_best" data-save></textarea>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="evening_learn">Cosa ho imparato su di me oggi</label>
+            <textarea id="evening_learn" data-save></textarea>
+          </div>
+        </section>
+
+        <section id="finalreader" class="panel">
+          <span class="eyebrow">Dichiarazione finale</span>
+          <h2>La mia firma sul cambiamento</h2>
+          <div class="field-group">
+            <label class="field-label" for="final_identity">Chi sono diventato dopo questo percorso</label>
+            <textarea id="final_identity" data-save></textarea>
+          </div>
+          <div class="grid-2">
+            <div class="field-group">
+              <label class="field-label" for="final_sign">Firma</label>
+              <input type="text" id="final_sign" data-save />
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="final_date">Data</label>
+              <input type="date" id="final_date" data-save />
+            </div>
+          </div>
+        </section>
+
+        <p class="footer-note">
+          Versione stabile del libro virtuale — pronta per GitHub Pages e per caricamento immagini locali.
+        </p>
+      </div>
+    </main>
+  </div>
+
+  <div class="floating-save" id="saveStatus">Nessuna modifica</div>
+
+  <script>
+    const STORAGE_KEY = "il_vertice_stabile_v1";
+    const LAST_SECTION_KEY = "il_vertice_last_section_v1";
+
+    const saveStatus = document.getElementById("saveStatus");
+    const lastSaved = document.getElementById("lastSaved");
+    const progressFill = document.getElementById("progressFill");
+    const progressText = document.getElementById("progressText");
+    const importFile = document.getElementById("importFile");
+    const saveFields = Array.from(document.querySelectorAll("[data-save]"));
+    const sections = Array.from(document.querySelectorAll("section[id]"));
+    const tocLinks = Array.from(document.querySelectorAll("#toc a"));
+
+    function setStatus(message){
+      saveStatus.textContent = message;
+      lastSaved.textContent = message;
+    }
+
+    function collectData(){
+      const data = {};
+      saveFields.forEach(el => {
+        if(!el.id) return;
+        if(el.type === "checkbox"){
+          data[el.id] = el.checked;
+        } else {
+          data[el.id] = el.value;
+        }
+      });
+      return data;
+    }
+
+    function saveData(){
+      try{
+        const data = collectData();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        const now = new Date();
+        const time = now.toLocaleTimeString("it-IT", {hour:"2-digit", minute:"2-digit"});
+        setStatus("Salvato alle " + time);
+      }catch(err){
+        setStatus("Errore salvataggio");
+      }
+    }
+
+    function loadData(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return;
+        const data = JSON.parse(raw);
+
+        saveFields.forEach(el => {
+          if(!el.id) return;
+          if(!(el.id in data)) return;
+
+          if(el.type === "checkbox"){
+            el.checked = !!data[el.id];
+          } else {
+            el.value = data[el.id] || "";
+          }
+        });
+
+        setStatus("Dati ripristinati");
+      }catch(err){
+        setStatus("Errore ripristino");
+      }
+    }
+
+    function saveLastSection(id){
+      try{
+        localStorage.setItem(LAST_SECTION_KEY, id);
+      }catch(err){}
+    }
+
+    function goToLastSection(){
+      const last = localStorage.getItem(LAST_SECTION_KEY);
+      if(last){
+        const el = document.getElementById(last);
+        if(el){
+          el.scrollIntoView({behavior:"smooth", block:"start"});
+        }
+      }
+    }
+
+    function updateActiveLink(){
+      let current = sections[0]?.id || "";
+      const offset = window.scrollY + 140;
+
+      sections.forEach(section => {
+        if(section.offsetTop <= offset){
+          current = section.id;
+        }
+      });
+
+      tocLinks.forEach(link => {
+        link.classList.toggle("active", link.getAttribute("href") === "#" + current);
+      });
+
+      if(current) saveLastSection(current);
+
+      const doc = document.documentElement;
+      const total = doc.scrollHeight - doc.clientHeight;
+      const scrolled = total > 0 ? (window.scrollY / total) * 100 : 0;
+      const percent = Math.max(0, Math.min(100, Math.round(scrolled)));
+      progressFill.style.width = percent + "%";
+      progressText.textContent = percent + "%";
+    }
+
+    let saveTimer;
+    function scheduleSave(){
+      clearTimeout(saveTimer);
+      setStatus("Salvataggio...");
+      saveTimer = setTimeout(saveData, 250);
+    }
+
+    saveFields.forEach(el => {
+      el.addEventListener("input", scheduleSave);
+      el.addEventListener("change", scheduleSave);
+    });
+
+    document.getElementById("continueBtn").addEventListener("click", goToLastSection);
+
+    document.getElementById("exportBtn").addEventListener("click", () => {
+      const data = {
+        exportedAt: new Date().toISOString(),
+        values: collectData()
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "il-vertice-appunti.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      setStatus("Appunti esportati");
+    });
+
+    document.getElementById("importBtn").addEventListener("click", () => {
+      importFile.click();
+    });
+
+    importFile.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        try{
+          const imported = JSON.parse(reader.result);
+          const values = imported.values || imported;
+
+          saveFields.forEach(el => {
+            if(!el.id) return;
+            if(!(el.id in values)) return;
+
+            if(el.type === "checkbox"){
+              el.checked = !!values[el.id];
+            } else {
+              el.value = values[el.id] || "";
+            }
+          });
+
+          saveData();
+          setStatus("Appunti importati");
+        }catch(err){
+          alert("File non valido");
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = "";
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      const ok = confirm("Vuoi davvero cancellare tutti i dati salvati di questo libro?");
+      if(!ok) return;
+
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(LAST_SECTION_KEY);
+
+      saveFields.forEach(el => {
+        if(el.type === "checkbox"){
+          el.checked = false;
+        } else {
+          el.value = "";
+        }
+      });
+
+      setStatus("Dati cancellati");
+      window.scrollTo({top:0, behavior:"smooth"});
+      updateActiveLink();
+    });
+
+    window.addEventListener("scroll", updateActiveLink);
+    window.addEventListener("load", () => {
+      loadData();
+      updateActiveLink();
+    });
+  </script>
+</body>
+</html>
