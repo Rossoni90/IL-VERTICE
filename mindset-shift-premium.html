@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MINDSET SHIFT PREMIUM — 249 €</title>
+  <style>
+    :root{
+      --bg:#050b13;
+      --bg2:#08111d;
+      --panel:rgba(9,17,29,.88);
+      --panel-2:rgba(255,255,255,.04);
+      --line:rgba(255,255,255,.08);
+      --text:#eef4ff;
+      --muted:#9fb0ca;
+      --gold:#d6b06a;
+      --gold2:#f2dbab;
+      --accent:#8cb8ff;
+      --shadow:0 24px 60px rgba(0,0,0,.38);
+      --max:1160px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(116,169,255,.10), transparent 20%),
+        radial-gradient(circle at top left, rgba(214,176,106,.12), transparent 20%),
+        linear-gradient(180deg, var(--bg), var(--bg2) 40%, var(--bg) 100%);
+    }
+
+    a{color:inherit}
+    .wrap{width:min(var(--max), calc(100% - 32px)); margin:auto}
+
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      padding:42px 0 70px;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:30px;
+      align-items:center;
+    }
+
+    .badge{
+      display:inline-block;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      color:var(--gold2);
+      font-size:.82rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-bottom:18px;
+    }
+
+    h1{
+      margin:0 0 16px;
+      font-size:clamp(2.8rem,6vw,5.2rem);
+      line-height:1.02;
+      font-family:Georgia,"Times New Roman",serif;
+      letter-spacing:-.02em;
+    }
+
+    .sub{
+      margin:0 0 20px;
+      color:#dce7fb;
+      font-size:1.1rem;
+      line-height:1.8;
+      max-width:760px;
+    }
+
+    .hero-points{
+      display:grid;
+      gap:10px;
+      margin:18px 0 24px;
+    }
+
+    .hero-points div{
+      color:#dfe9fb;
+      font-size:1rem;
+      line-height:1.6;
+    }
+
+    .price{
+      display:flex;
+      align-items:end;
+      gap:12px;
+      margin:12px 0 24px;
+    }
+
+    .price strong{
+      font-size:clamp(2.6rem,6vw,4rem);
+      color:var(--gold2);
+      line-height:1;
+      font-family:Georgia,"Times New Roman",serif;
+    }
+
+    .price span{
+      color:var(--muted);
+      margin-bottom:8px;
+      font-size:1rem;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-top:4px;
+    }
+
+    .btn{
+      display:inline-block;
+      padding:16px 22px;
+      border-radius:16px;
+      text-decoration:none;
+      font-weight:800;
+      transition:transform .18s ease, opacity .18s ease, box-shadow .18s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+      opacity:.98;
+    }
+
+    .btn-primary{
+      background:linear-gradient(135deg,var(--gold2),var(--gold));
+      color:#08111b;
+      box-shadow:0 14px 30px rgba(214,176,106,.18);
+    }
+
+    .btn-secondary{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+    }
+
+    .card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+    }
+
+    .cover-card{
+      padding:26px;
+    }
+
+    .cover-frame{
+      aspect-ratio:3/4;
+      border-radius:24px;
+      padding:30px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      background:
+        radial-gradient(circle at top, rgba(116,169,255,.24), transparent 28%),
+        radial-gradient(circle at bottom, rgba(214,176,106,.12), transparent 30%),
+        linear-gradient(180deg,#0b1624,#07111d 60%,#050b13);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .cover-inner{
+      width:100%;
+      padding:28px 18px;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+    }
+
+    .cover-inner small{
+      display:block;
+      color:var(--gold2);
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      margin-bottom:12px;
+    }
+
+    .cover-inner h2{
+      margin:0;
+      font-size:clamp(2rem,4.8vw,3rem);
+      line-height:1.02;
+      font-family:Georgia,"Times New Roman",serif;
+    }
+
+    .cover-inner p{
+      margin:16px 0 0;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:.98rem;
+    }
+
+    section{
+      padding:16px 0 74px;
+    }
+
+    .section-title{
+      margin:0 0 12px;
+      font-size:clamp(1.9rem,4vw,3rem);
+      line-height:1.1;
+      font-family:Georgia,"Times New Roman",serif;
+    }
+
+    .section-sub{
+      margin:0 0 28px;
+      max-width:850px;
+      color:var(--muted);
+      line-height:1.8;
+      font-size:1rem;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+    }
+
+    .mini-card{
+      padding:22px;
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:var(--panel-2);
+    }
+
+    .mini-card h3{
+      margin:0 0 10px;
+      color:var(--gold2);
+      font-size:1.08rem;
+    }
+
+    .mini-card p{
+      margin:0;
+      color:#dde8fb;
+      line-height:1.75;
+      font-size:.98rem;
+    }
+
+    .feature-list{
+      display:grid;
+      gap:14px;
+    }
+
+    .feature-item{
+      padding:18px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+    }
+
+    .feature-item strong{
+      display:block;
+      color:var(--gold2);
+      margin-bottom:8px;
+      font-size:1rem;
+    }
+
+    .quote{
+      padding:28px;
+      border-radius:28px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      box-shadow:var(--shadow);
+    }
+
+    .quote p{
+      margin:0;
+      font-size:1.08rem;
+      line-height:1.9;
+      color:#e5eefc;
+    }
+
+    .quote p + p{
+      margin-top:14px;
+    }
+
+    .cta{
+      margin:12px 0 80px;
+    }
+
+    .cta .card{
+      text-align:center;
+      padding:38px 24px;
+    }
+
+    .small{
+      color:var(--muted);
+      font-size:.94rem;
+      line-height:1.8;
+      max-width:800px;
+      margin:14px auto 0;
+    }
+
+    .divider{
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+      margin:4px 0 0;
+    }
+
+    @media (max-width:920px){
+      .hero{min-height:auto;padding-top:28px}
+      .hero-grid,.grid-3,.grid-2{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="badge">Edizione premium • PDF strategico</span>
+        <h1>MINDSET SHIFT<br>PREMIUM</h1>
+        <p class="sub">
+          Una versione premium di posizionamento per chi vuole entrare nel contenuto con più valore percepito,
+          più autorevolezza e una presentazione più alta. Basato sul PDF originale
+          <a href="https://www.genspark.ai/api/files/s/OjzsNA4o" target="_blank" rel="noopener" style="color:#f2dbab;">mindsetbusiness.pdf</a>.
+        </p>
+
+        <div class="hero-points">
+          <div>• Mentalità imprenditoriale, valore, pricing, disciplina e crescita strategica</div>
+          <div>• Capitoli diretti, impatto forte, esercizi concreti e roadmap di trasformazione</div>
+          <div>• Posizionamento premium per un’offerta digitale ad alta percezione</div>
+        </div>
+
+        <div class="price">
+          <strong>249 €</strong>
+          <span>accesso premium al PDF digitale</span>
+        </div>
+
+        <div class="actions">
+          <a class="btn btn-primary" href="METTI_QUI_LINK_STRIPE_249" target="_blank" rel="noopener">
+            Accedi alla versione premium
+          </a>
+          <a class="btn btn-secondary" href="#contenuto">
+            Scopri il contenuto
+          </a>
+        </div>
+      </div>
+
+      <div class="card cover-card">
+        <div class="cover-frame">
+          <div class="cover-inner">
+            <small>by Rossoni</small>
+            <h2>MINDSET<br>SHIFT<br>PREMIUM</h2>
+            <p>
+              Guida strategica per trasformare mentalità, identità e visione imprenditoriale
+              con un posizionamento più alto.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contenuto">
+    <div class="wrap">
+      <h2 class="section-title">Cosa contiene</h2>
+      <p class="section-sub">
+        Il contenuto di <a href="https://www.genspark.ai/api/files/s/OjzsNA4o" target="_blank" rel="noopener" style="color:#f2dbab;">mindsetbusiness.pdf</a>
+        affronta blocchi mentali, cambio di identità, percezione del valore, psicologia del prezzo,
+        disciplina operativa, ecosistema digitale, fallimento strategico e piano di trasformazione in 90 giorni.
+      </p>
+
+      <div class="grid-3">
+        <div class="mini-card">
+          <h3>Reset del software mentale</h3>
+          <p>Capisci quali credenze stanno sabotando azione, pubblicazione, vendita e crescita del tuo progetto digitale.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Identità da imprenditore</h3>
+          <p>Passi dalla logica del dipendente alla mente del creatore, dello stratega e del costruttore di valore.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Roadmap di trasformazione</h3>
+          <p>Hai una direzione chiara con esercizi, principi operativi e un capitolo dedicato alla trasformazione in 90 giorni.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2 class="section-title">Perché versione premium</h2>
+      <p class="section-sub">
+        Questa pagina posiziona il contenuto in modo più alto rispetto alla versione entry-level da 50 €,
+        mantenendo lo stesso asset di base ma con una percezione più forte, più elegante e più autorevole.
+      </p>
+
+      <div class="grid-2">
+        <div class="feature-list">
+          <div class="feature-item">
+            <strong>Più autorità percepita</strong>
+            Il contenuto viene presentato come guida strategica premium, non come semplice PDF economico.
+          </div>
+          <div class="feature-item">
+            <strong>Posizionamento più alto</strong>
+            Il prezzo sostiene un’offerta più selettiva e una comunicazione più aspirazionale.
+          </div>
+          <div class="feature-item">
+            <strong>Impatto più elegante</strong>
+            Layout, tono e struttura danno più valore al contenuto agli occhi del cliente.
+          </div>
+        </div>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <strong>Contenuti forti</strong>
+            Identità, pricing, disciplina, ecosistema, fallimento strategico e crescita mentale.
+          </div>
+          <div class="feature-item">
+            <strong>Taglio diretto</strong>
+            Linguaggio chiaro, forte, senza fuffa motivazionale vuota.
+          </div>
+          <div class="feature-item">
+            <strong>Uso strategico</strong>
+            Ideale come prodotto premium digitale, consulenziale o di accesso qualificato.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2 class="section-title">A chi parla davvero</h2>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h3>Per chi vuole salire di livello</h3>
+          <p>Se senti di avere valore ma non lo stai ancora posizionando con forza, questa lettura può riallineare testa, direzione e standard.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Per chi vuole trasformare il modo di vendere</h3>
+          <p>Se hai blocchi su prezzo, visibilità, autostima o decisione, qui trovi una struttura mentale più imprenditoriale.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Per chi vuole più ordine</h3>
+          <p>Se sei stanco di consumare contenuti senza applicare, qui trovi un PDF con concetti forti ed esercizi concreti.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Per chi vuole posizionarsi meglio</h3>
+          <p>È adatto anche come offerta digitale premium quando vuoi alzare la percezione del prodotto rispetto a una versione base.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="quote">
+        <p>
+          “Il business digitale non è solo una questione di strumenti. È una questione di identità,
+          percezione di valore, disciplina e capacità di reggere una visione più grande.”
+        </p>
+        <p>
+          Questo è il cuore del contenuto di
+          <a href="https://www.genspark.ai/api/files/s/OjzsNA4o" target="_blank" rel="noopener" style="color:#f2dbab;">mindsetbusiness.pdf</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <div class="card">
+        <h2 class="section-title" style="margin-bottom:10px;">Pronto a entrare nella versione premium?</h2>
+        <p class="section-sub" style="margin:0 auto 22px;">
+          Accedi ora a <strong>MINDSET SHIFT PREMIUM</strong> e apri il PDF digitale con un posizionamento più alto e più autorevole.
+        </p>
+
+        <a class="btn btn-primary" href="METTI_QUI_LINK_STRIPE_249" target="_blank" rel="noopener">
+          Acquista MINDSET SHIFT PREMIUM — 249 €
+        </a>
+
+        <p class="small">
+          Dopo il pagamento potrai aprire il file
+          <a href="https://www.genspark.ai/api/files/s/OjzsNA4o" target="_blank" rel="noopener" style="color:#f2dbab;">mindsetbusiness.pdf</a>.
+          Il link Stripe andrà inserito sostituendo il segnaposto <strong>METTI_QUI_LINK_STRIPE_249</strong>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
