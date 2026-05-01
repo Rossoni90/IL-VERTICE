@@ -15,7 +15,9 @@
       --gold2:#f2dbab;
       --shadow:0 24px 50px rgba(0,0,0,.35);
     }
+
     *{box-sizing:border-box}
+
     body{
       margin:0;
       min-height:100vh;
@@ -25,19 +27,21 @@
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(circle at top right, rgba(116,169,255,.10), transparent 18%),
-        radial-gradient(circle at top left, rgba(214,176,106,.10), transparent 18%),
+        radial-gradient(circle at top right,rgba(116,169,255,.10),transparent 18%),
+        radial-gradient(circle at top left,rgba(214,176,106,.10),transparent 18%),
         linear-gradient(180deg,#040b14,#08111d 35%,#07111d 100%);
     }
+
     .card{
       width:min(760px,100%);
       background:var(--panel);
       border:1px solid var(--line);
       border-radius:30px;
-      padding:36px 24px;
+      padding:38px 26px;
       box-shadow:var(--shadow);
       text-align:center;
     }
+
     .eyebrow{
       display:inline-block;
       padding:8px 12px;
@@ -50,12 +54,14 @@
       text-transform:uppercase;
       margin-bottom:16px;
     }
+
     h1{
       margin:0 0 12px;
       font-size:clamp(2rem,5vw,3.2rem);
       line-height:1.1;
       font-family:Georgia,"Times New Roman",serif;
     }
+
     p{
       margin:0 auto 14px;
       max-width:620px;
@@ -63,11 +69,13 @@
       line-height:1.7;
       font-size:1.03rem;
     }
+
     .actions{
       display:grid;
       gap:14px;
       margin-top:28px;
     }
+
     .btn{
       display:block;
       text-decoration:none;
@@ -76,17 +84,14 @@
       font-weight:800;
       background:linear-gradient(135deg,var(--gold2),var(--gold));
       color:#08111b;
-      transition:transform .15s ease, opacity .2s ease;
+      transition:transform .15s ease,opacity .2s ease;
     }
+
     .btn:hover{
       transform:translateY(-1px);
       opacity:.96;
     }
-    .btn-secondary{
-      background:rgba(255,255,255,.06);
-      color:var(--text);
-      border:1px solid var(--line);
-    }
+
     .box{
       margin-top:24px;
       padding:18px;
@@ -95,16 +100,21 @@
       background:rgba(255,255,255,.03);
       text-align:left;
     }
+
     .box p{
-      margin:0 0 10px;
+      margin:0;
       max-width:none;
       font-size:.97rem;
     }
-    .box p:last-child{margin-bottom:0}
-    strong{color:var(--gold2)}
+
+    strong{
+      color:var(--gold2);
+    }
+
     .small{
       color:var(--muted);
       font-size:.93rem;
+      margin-top:10px;
     }
   </style>
 </head>
@@ -112,25 +122,17 @@
   <div class="card">
     <span class="eyebrow">Pagamento completato</span>
     <h1>Benvenuto in IL VERTICE</h1>
-
-    <p>
-      Il tuo accesso è pronto. Da qui puoi aprire subito il libro virtuale interattivo
-      e scaricare il PDF del tuo ebook.
-    </p>
+    <p>Il tuo accesso è pronto. Da qui puoi entrare subito nel libro virtuale interattivo e iniziare il tuo percorso online.</p>
 
     <div class="actions">
       <a class="btn" href="https://rossoni90.github.io/IL-VERTICE/" target="_blank" rel="noopener">
         Apri IL VERTICE
       </a>
-
-      <a class="btn btn-secondary" href="il-vertice.pdf.pdf" target="_blank" rel="noopener">
-        Scarica il PDF
-      </a>
     </div>
 
     <div class="box">
       <p><strong>Importante:</strong> per ritrovare i campi salvati del libro, aprilo sempre dallo stesso browser o dispositivo.</p>
-      <p class="small">Se da telefono il PDF non parte subito, attendi qualche secondo o riapri il pulsante una seconda volta.</p>
+      <p class="small">Tutto il percorso si svolge online, direttamente dentro IL VERTICE.</p>
     </div>
   </div>
 </body>
